@@ -39,3 +39,39 @@ yarn-error.*
 
 expo-env.d.ts
 # @end expo-cli
+
+# Build files
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+ios/build/
+ios/Pods/
+*.apk
+*.aab
+*.ipa
+
+# EAS
+.eas/
+.expo-shared/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary files
+*.log
+*.tmp
+temp/
+tmp/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Keystores
+*.keystore
+!debug.keystore
