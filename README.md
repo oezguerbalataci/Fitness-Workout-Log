@@ -35,7 +35,7 @@ A modern, intuitive workout tracking app built with React Native and Expo. Track
 1. Clone the repository:
 
 ```bash
-git clone [your-repository-url]
+git clone https://github.com/oezguerbalataci/Fitness-Workout-Log.git
 cd fitnessworkout
 ```
 
