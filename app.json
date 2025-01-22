@@ -60,6 +60,14 @@
         "asset": "./assets/fonts/Roboto-Bold.ttf",
         "family": "Roboto-Bold"
       }
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ab5a33fc-b88b-439d-b531-219b312577c4"
+      }
+    }
   }
 }
