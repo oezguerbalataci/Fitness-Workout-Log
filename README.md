@@ -57,28 +57,44 @@ npm install
 yarn install
 ```
 
-3. Start the development server:
+### Running the App
+
+Since this app uses MMKV for storage, it needs to be run as a native app. You cannot use Expo Go.
+
+#### For iOS:
 
 ```bash
-npx expo start
+npx expo run:ios
 ```
 
-### Running on Device
+#### For Android:
 
-#### Using Expo Go (Easiest)
+```bash
+npx expo run:android
+```
 
-1. Install Expo Go on your device
-2. Scan the QR code from the terminal
-3. The app will open in Expo Go
+Note: For iOS, you need a Mac with Xcode installed. For Android, you need Android Studio with an emulator set up.
 
-#### Building a Development Build
+#### Development Workflow
+
+After the initial build, you can use the following command for development with hot reload:
+
+```bash
+npx expo start --dev-client
+```
+
+Then open the app on your device/emulator. Make sure your device is on the same network as your development machine.
+
+### Building for Distribution
+
+To create a standalone build:
 
 ```bash
 # For Android
-npx eas build --profile development --platform android
+npx eas build --platform android
 
 # For iOS (requires Apple Developer Account)
-npx eas build --profile development --platform ios
+npx eas build --platform ios
 ```
 
 ## Project Structure
