@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "fitnessworkout",
-    "slug": "fitnessworkout",
+    "name": "PowerLog",
+    "slug": "powerlog",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/appicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -18,7 +18,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.fitnessworkout",
+      "bundleIdentifier": "com.anonymous.powerlog",
       "buildNumber": "1",
       "infoPlist": {
         "UIBackgroundModes": [
@@ -30,10 +30,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/appicon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.fitnessworkout"
+      "package": "com.anonymous.powerlog"
     },
     "web": {
       "bundler": "metro",

@@ -1,4 +1,4 @@
-package com.anonymous.fitnessworkout
+package com.anonymous.powerlog
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

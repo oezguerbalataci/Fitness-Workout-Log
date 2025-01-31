@@ -1,4 +1,4 @@
-package com.anonymous.fitnessworkout
+package com.anonymous.powerlog
 
 import android.app.Application
 import android.content.res.Configuration
