@@ -24,92 +24,94 @@ const formatDate = (date: number) => new Date(date).toISOString().split("T")[0];
 // Get today's date in the same format as formatDate
 const getTodayDate = () => new Date().toISOString().split("T")[0];
 
-const WorkoutLogItem = React.memo(
-  ({ log, isDarkMode }: { log: any; isDarkMode: boolean }) => (
-    <View
-      className={`${
-        isDarkMode ? "bg-gray-800" : "bg-white"
-      } p-4 rounded-xl border ${
-        isDarkMode ? "border-gray-700" : "border-gray-100"
-      } mx-6`}
-    >
-      <View className="flex-row justify-between items-center mb-4">
-        <View>
-          <Text
-            className={`text-lg font-semibold ${
-              isDarkMode ? "text-white" : "text-gray-900"
-            }`}
-          >
-            {log.workoutName}
-          </Text>
-          <Text
-            className={`text-sm ${
-              isDarkMode ? "text-gray-400" : "text-gray-500"
-            }`}
-          >
-            {log.templateName}
-          </Text>
-        </View>
+const WorkoutLogItem = ({
+  log,
+  isDarkMode,
+}: {
+  log: any;
+  isDarkMode: boolean;
+}) => (
+  <View
+    className={`${
+      isDarkMode ? "bg-gray-800" : "bg-white"
+    } p-4 rounded-xl border ${
+      isDarkMode ? "border-gray-700" : "border-gray-100"
+    } mx-6`}
+  >
+    <View className="flex-row justify-between items-center mb-4">
+      <View>
         <Text
-          className={`text-sm ${
-            isDarkMode ? "text-gray-500" : "text-gray-400"
+          className={`text-lg font-semibold ${
+            isDarkMode ? "text-white" : "text-gray-900"
           }`}
         >
-          {new Date(log.date).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+          {log.workoutName}
         </Text>
-      </View>
-
-      <View className="space-y-3">
-        {log.exercises.map((exercise: any) => (
-          <View key={exercise.id}>
-            <Text
-              className={`text-base font-medium ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              } mb-2`}
-            >
-              {exercise.name}
-            </Text>
-            <View className="flex-row flex-wrap gap-2">
-              {exercise.sets.map((set: any, index: number) => (
-                <View key={index}>
-                  <Text
-                    className={`text-sm ${
-                      isDarkMode ? "text-gray-300" : "text-gray-600"
-                    }`}
-                  >
-                    {set.weight}kg × {set.reps}
-                    {set.rpe ? ` @${set.rpe}` : ""}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        ))}
-      </View>
-
-      <View
-        className={`mt-4 pt-4 border-t ${
-          isDarkMode ? "border-gray-700" : "border-gray-100"
-        } flex-row items-center`}
-      >
-        <MaterialIcons
-          name="timer"
-          size={16}
-          color={isDarkMode ? "#9ca3af" : "#94A3B8"}
-        />
         <Text
           className={`text-sm ${
             isDarkMode ? "text-gray-400" : "text-gray-500"
-          } ml-2`}
+          }`}
         >
-          {Math.round(log.duration / 1000 / 60)} minutes
+          {log.templateName}
         </Text>
       </View>
+      <Text
+        className={`text-sm ${isDarkMode ? "text-gray-500" : "text-gray-400"}`}
+      >
+        {new Date(log.date).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </Text>
     </View>
-  )
+
+    <View className="space-y-3">
+      {log.exercises.map((exercise: any) => (
+        <View key={exercise.id}>
+          <Text
+            className={`text-base font-medium ${
+              isDarkMode ? "text-white" : "text-gray-900"
+            } mb-2`}
+          >
+            {exercise.name}
+          </Text>
+          <View className="flex-row flex-wrap gap-2">
+            {exercise.sets.map((set: any, index: number) => (
+              <View key={index}>
+                <Text
+                  className={`text-sm ${
+                    isDarkMode ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  {set.weight}kg × {set.reps}
+                  {set.rpe ? ` @${set.rpe}` : ""}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      ))}
+    </View>
+
+    <View
+      className={`mt-4 pt-4 border-t ${
+        isDarkMode ? "border-gray-700" : "border-gray-100"
+      } flex-row items-center`}
+    >
+      <MaterialIcons
+        name="timer"
+        size={16}
+        color={isDarkMode ? "#9ca3af" : "#94A3B8"}
+      />
+      <Text
+        className={`text-sm ${
+          isDarkMode ? "text-gray-400" : "text-gray-500"
+        } ml-2`}
+      >
+        {Math.round(log.duration / 1000 / 60)} minutes
+      </Text>
+    </View>
+  </View>
 );
 
 const EmptyList = React.memo(

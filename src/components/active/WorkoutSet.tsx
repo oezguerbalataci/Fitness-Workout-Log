@@ -179,12 +179,8 @@ export const WorkoutSet = React.memo(
         key={`${exerciseId}-${setIndex}`}
         className="flex-row items-center"
         layout={Layout.springify()}
-        entering={BounceIn.duration(400).withCallback(() => {
-          "worklet";
-        })}
-        exiting={SlideOutRight.duration(200).withCallback(() => {
-          "worklet";
-        })}
+        entering={BounceIn.duration(400)}
+        exiting={SlideOutRight.duration(200)}
       >
         <View
           className={`flex-1 flex-row items-center justify-between p-2 rounded-xl mb-2 ${
