@@ -9,6 +9,7 @@ import Animated, {
   Layout,
 } from "react-native-reanimated";
 import { WorkoutTimer } from "../workout/WorkoutTimer";
+import { haptics } from "../../utils/haptics";
 
 interface WorkoutHeaderProps {
   title: string;
@@ -27,6 +28,16 @@ export const WorkoutHeader = ({
   headerHeight,
   isDarkMode,
 }: WorkoutHeaderProps) => {
+  const handleLeave = () => {
+    haptics.warning();
+    onLeave();
+  };
+
+  const handleComplete = () => {
+    haptics.success();
+    onComplete();
+  };
+
   const timerStyle = useAnimatedStyle(() => {
     const opacity = interpolate(
       scrollY.value,
@@ -79,7 +90,7 @@ export const WorkoutHeader = ({
     >
       <View className="flex-row justify-between items-center">
         <TouchableOpacity
-          onPress={onLeave}
+          onPress={handleLeave}
           className={`p-2 -ml-2 rounded-lg ${
             isDarkMode
               ? "bg-red-900/30 active:bg-red-900/50"
@@ -121,7 +132,7 @@ export const WorkoutHeader = ({
         </View>
 
         <TouchableOpacity
-          onPress={onComplete}
+          onPress={handleComplete}
           className={`p-2 -mr-2 rounded-lg ${
             isDarkMode
               ? "bg-green-900/30 active:bg-green-900/50"

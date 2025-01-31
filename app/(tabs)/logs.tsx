@@ -36,7 +36,7 @@ const WorkoutLogItem = React.memo(
       <View className="flex-row justify-between items-center mb-4">
         <View>
           <Text
-            className={`text-lg font-semibold 
+            className={`text-lg font-semibold ${
               isDarkMode ? "text-white" : "text-gray-900"
             }`}
           >

@@ -15,6 +15,7 @@ import {
   Exercise,
 } from "../../src/store/workoutStore";
 import { useThemeStore } from "../../src/store/themeStore";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useState, useEffect, useCallback } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Header } from "../../src/components/ui/Header";
@@ -69,6 +70,7 @@ interface SetData {
 }
 
 export default function ActiveWorkoutScreen() {
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const { templateId, workoutId } = useLocalSearchParams<{
@@ -89,7 +91,7 @@ export default function ActiveWorkoutScreen() {
   const scale = useSharedValue(1);
   const pressScale = useSharedValue(1);
   const scrollY = useSharedValue(0);
-  const headerHeight = 150; // Height at which timer should be fully transitioned
+  const headerHeight = insets.top; // Height at which timer should be fully transitioned
 
   // Create active exercises directly from currentWorkout.exerciseData
   const activeExercises = currentWorkout?.exerciseData

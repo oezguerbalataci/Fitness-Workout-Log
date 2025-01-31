@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
+import { haptics } from "../../../../src/utils/haptics";
 import {
   useWorkoutStore,
   type Template,
@@ -30,6 +31,9 @@ export default function WorkoutScreen() {
 
   const handleStartWorkout = () => {
     if (!workout) return;
+
+    // Trigger haptic feedback
+    haptics.success();
 
     // Start the workout
     useWorkoutStore.getState().startCurrentWorkout(id, workoutId);

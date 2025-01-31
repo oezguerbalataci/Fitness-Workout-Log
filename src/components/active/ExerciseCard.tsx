@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "../../components/Text";
 import { MaterialIcons } from "@expo/vector-icons";
 import Animated, { SlideInRight, Layout } from "react-native-reanimated";
@@ -164,9 +164,15 @@ export const ExerciseCard = React.memo(
       <Animated.View
         entering={SlideInRight.delay(index * 100)}
         layout={Layout}
-        className={`mb-3 rounded-lg ${isDarkMode ? "bg-gray-800" : "bg-white"}`}
+        style={{
+          borderWidth: StyleSheet.hairlineWidth,
+          borderColor: "gray",
+        }}
+        className={`mb-3  rounded-lg ${
+          isDarkMode ? "bg-gray-800" : "bg-white"
+        }`}
       >
-        <View className="px-4 py-3">
+        <View className="p-4 gap-3">
           <View className="flex-row items-center content-center justify-between mb-3">
             <View className="flex-row items-center gap-2">
               <View>
@@ -198,14 +204,6 @@ export const ExerciseCard = React.memo(
                   size={16}
                   color={isDarkMode ? "#F87171" : "#DC2626"}
                 />
-                <Text
-                  variant="medium"
-                  className={`text-sm font-medium ${
-                    isDarkMode ? "text-red-400" : "text-red-600"
-                  }`}
-                >
-                  Delete
-                </Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -230,7 +228,7 @@ export const ExerciseCard = React.memo(
             </TouchableOpacity>
           </View>
 
-          <View className="space-y-2">
+          <View className="gap-y-2">
             {sets.map((set, setIndex) => (
               <WorkoutSet
                 key={`${exerciseId}-${setIndex}`}

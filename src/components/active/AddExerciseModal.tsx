@@ -19,6 +19,7 @@ import {
 } from "../../store/workoutStore";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useState, useMemo } from "react";
+import { haptics } from "../../utils/haptics";
 
 interface AddExerciseModalProps {
   visible: boolean;
@@ -72,6 +73,7 @@ export const AddExerciseModal = ({
   }, [searchQuery, customExercises]);
 
   const handleSelectExercise = (exercise: ExerciseDefinition) => {
+    haptics.light();
     // Add to current workout first to get the generated ID
     addExerciseToCurrentWorkout({
       id: exercise.id,
@@ -115,6 +117,7 @@ export const AddExerciseModal = ({
   const handleCreateExercise = () => {
     if (!newExercise.name || !newExercise.bodyPart) return;
 
+    haptics.success();
     const defaultSets = parseInt(newExercise.defaultSets) || 3;
     const defaultReps = parseInt(newExercise.defaultReps) || 10;
 

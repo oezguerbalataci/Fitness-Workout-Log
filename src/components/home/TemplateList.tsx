@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useWorkoutStore } from "../../store/workoutStore";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useThemeStore } from "../../store/themeStore";
+import { haptics } from "../../utils/haptics";
 
 export function TemplateList() {
   const router = useRouter();
@@ -47,7 +48,10 @@ export function TemplateList() {
           Create your first workout template
         </Text>
         <TouchableOpacity
-          onPress={() => router.push("/template/new")}
+          onPress={() => {
+            haptics.light();
+            router.push("/template/new");
+          }}
           className="mt-6 flex-row items-center px-4 py-2 rounded-lg bg-blue-500 active:bg-blue-600"
         >
           <MaterialIcons name="add" size={20} color="white" />
@@ -68,7 +72,10 @@ export function TemplateList() {
         {templates.map((template) => (
           <TouchableOpacity
             key={template.id}
-            onPress={() => router.push(`../../template/${template.id}`)}
+            onPress={() => {
+              haptics.light();
+              router.push(`../../template/${template.id}`);
+            }}
             className={`p-4 ${
               isDarkMode ? "bg-gray-800" : "bg-white"
             } rounded-xl border ${
@@ -106,7 +113,10 @@ export function TemplateList() {
         ))}
 
         <TouchableOpacity
-          onPress={() => router.push("/template/new")}
+          onPress={() => {
+            haptics.light();
+            router.push("/template/new");
+          }}
           className={`p-4 ${
             isDarkMode ? "bg-gray-800" : "bg-white"
           } rounded-xl border ${

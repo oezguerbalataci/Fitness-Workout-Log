@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Text } from "../../components/Text";
 import { AddExerciseModal } from "./AddExerciseModal";
 import { WorkoutSet } from "../../store/workoutStore";
+import { haptics } from "../../utils/haptics";
 
 interface ExerciseListHeaderProps {
   isDarkMode: boolean;
@@ -27,6 +28,11 @@ export const ExerciseListHeader = ({
 }: ExerciseListHeaderProps) => {
   const [showAddExercise, setShowAddExercise] = useState(false);
 
+  const handleAddExercise = () => {
+    haptics.light();
+    setShowAddExercise(true);
+  };
+
   return (
     <>
       <View
@@ -42,7 +48,7 @@ export const ExerciseListHeader = ({
         >
           Exercises
         </Text>
-        <TouchableOpacity onPress={() => setShowAddExercise(true)}>
+        <TouchableOpacity onPress={handleAddExercise}>
           <MaterialIcons
             name="add"
             size={24}

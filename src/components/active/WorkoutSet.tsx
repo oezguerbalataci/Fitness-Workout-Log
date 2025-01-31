@@ -100,7 +100,10 @@ export const WorkoutSet = React.memo(
     handleInputBlur,
     handleRemoveSet,
   }: WorkoutSetProps) => {
-    const exerciseInputs = localInputs[exerciseId] || {};
+    const exerciseInputs = useMemo(
+      () => localInputs[exerciseId] || {},
+      [localInputs, exerciseId]
+    );
 
     // Memoize input handlers
     const handleWeightChange = useCallback(
@@ -176,15 +179,19 @@ export const WorkoutSet = React.memo(
         key={`${exerciseId}-${setIndex}`}
         className="flex-row items-center"
         layout={Layout.springify()}
-        entering={BounceIn.duration(400)}
-        exiting={SlideOutRight.duration(200)}
+        entering={BounceIn.duration(400).withCallback(() => {
+          "worklet";
+        })}
+        exiting={SlideOutRight.duration(200).withCallback(() => {
+          "worklet";
+        })}
       >
         <View
-          className={`flex-1 flex-row items-center justify-between p-2.5 rounded-lg ${
+          className={`flex-1 flex-row items-center justify-between p-2 rounded-xl mb-2 ${
             isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
           }`}
         >
-          <View className="flex-row items-center">
+          <View className="flex-row items-center gap-3 ">
             <Text
               className={`font-medium min-w-[60px] p-2 ${
                 isDarkMode ? "text-gray-300" : "text-gray-700"
@@ -192,7 +199,7 @@ export const WorkoutSet = React.memo(
             >
               Set {setIndex + 1}
             </Text>
-            <View className="flex-1 flex-row items-center justify-end space-x-6">
+            <View className="flex-row flex-1">
               <SetInput
                 value={
                   exerciseInputs[setIndex]?.weight ??
@@ -235,7 +242,7 @@ export const WorkoutSet = React.memo(
               />
             </View>
 
-            <TouchableOpacity onPress={handleSetRemove} className="pl-4">
+            <TouchableOpacity onPress={handleSetRemove}>
               <MaterialIcons
                 name="remove-circle-outline"
                 size={20}
@@ -245,6 +252,16 @@ export const WorkoutSet = React.memo(
           </View>
         </View>
       </Animated.View>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.exerciseId === nextProps.exerciseId &&
+      prevProps.setIndex === nextProps.setIndex &&
+      prevProps.isDarkMode === nextProps.isDarkMode &&
+      prevProps.set === nextProps.set &&
+      prevProps.localInputs[prevProps.exerciseId] ===
+        nextProps.localInputs[nextProps.exerciseId]
     );
   }
 );
