@@ -3,6 +3,7 @@ import { View, AppState } from "react-native";
 import { Text } from "../Text";
 import { useTimerStore } from "../../store/timerStore";
 import { useThemeStore } from "../../store/themeStore";
+import { useWorkoutStore } from "../../store/workoutStore";
 
 interface WorkoutTimerProps {
   isDarkMode?: boolean;
@@ -13,13 +14,19 @@ export function WorkoutTimer({
   isDarkMode: propIsDarkMode,
   compact,
 }: WorkoutTimerProps) {
-  const { elapsedTime, isRunning, updateElapsedTime, checkAndRestoreTimer } =
-    useTimerStore();
+  const {
+    elapsedTime,
+    isRunning,
+    updateElapsedTime,
+    checkAndRestoreTimer,
+    stopTimer,
+  } = useTimerStore();
   const storeIsDarkMode = useThemeStore((state) => state.isDarkMode);
   const isDarkMode = propIsDarkMode ?? storeIsDarkMode;
   const [displayTime, setDisplayTime] = useState(elapsedTime);
   const frameRef = useRef<number>();
   const lastUpdateRef = useRef<number>(Date.now());
+  const currentWorkout = useWorkoutStore((state) => state.currentWorkout);
 
   // Format time helper
   const formatTime = useCallback((ms: number) => {
@@ -37,8 +44,7 @@ export function WorkoutTimer({
     let isMounted = true;
     const updateTimer = () => {
       if (!isMounted) return;
-
-      if (isRunning) {
+      if (isRunning && currentWorkout) {
         const now = Date.now();
         if (now - lastUpdateRef.current >= 1000) {
           updateElapsedTime();
@@ -48,7 +54,7 @@ export function WorkoutTimer({
       }
     };
 
-    if (isRunning) {
+    if (isRunning && currentWorkout) {
       frameRef.current = requestAnimationFrame(updateTimer);
     }
 
@@ -59,7 +65,7 @@ export function WorkoutTimer({
         frameRef.current = undefined;
       }
     };
-  }, [isRunning, updateElapsedTime]);
+  }, [isRunning, updateElapsedTime, currentWorkout]);
 
   // Update display time when elapsed time changes
   useEffect(() => {
@@ -104,6 +110,16 @@ export function WorkoutTimer({
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!currentWorkout && isRunning) {
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = undefined;
+      }
+      stopTimer();
+    }
+  }, [currentWorkout, isRunning, stopTimer]);
 
   if (compact) {
     return (

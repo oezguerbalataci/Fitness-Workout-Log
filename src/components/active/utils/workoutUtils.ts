@@ -39,14 +39,6 @@ export const handleComplete = (
   useTimerStore.getState().stopTimer();
   useTimerStore.getState().resetTimer();
 
-  // Force cleanup of any pending animation frames
-  if (typeof window !== 'undefined') {
-    const maxId = window.requestAnimationFrame(() => {});
-    for (let i = 1; i < maxId; i++) {
-      window.cancelAnimationFrame(i);
-    }
-  }
-
   // Update personal bests
   Object.entries(exerciseSets).forEach(([exerciseId, sets]) => {
     // Get the current workout state to find exercise info
@@ -103,16 +95,8 @@ export const handleLeaveWorkout = (router: Router) => {
   // Clear current workout without saving
   useWorkoutStore.getState().quitCurrentWorkout();
   
-  // Force cleanup of any pending animation frames
-  if (typeof window !== 'undefined') {
-    const maxId = window.requestAnimationFrame(() => {});
-    for (let i = 1; i < maxId; i++) {
-      window.cancelAnimationFrame(i);
-    }
-  }
-  
-  // Navigate back to templates
-  router.push("/(tabs)");
+  // Navigate away using replace for proper cleanup, as in complete workout
+  router.replace("/(tabs)");
 };
 
 export const handleRemoveExercise = (

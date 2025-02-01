@@ -125,6 +125,7 @@ export default function ActiveWorkoutScreen() {
       // Reset local state
       setExerciseSets({});
       setLocalInputs({});
+      stopTimer();
       setShowQuitDialog(false);
     };
   }, []);
@@ -164,14 +165,13 @@ export default function ActiveWorkoutScreen() {
     };
   }, [exerciseSets]);
 
-  // Start timer when component mounts, but only if there isn't one already running
+  // Start timer when component mounts, but only if we have a current workout
   useEffect(() => {
-    // Only initialize if we have a current workout
     if (currentWorkout) {
       initializeTimer();
     }
     return () => {
-      // No cleanup needed - timer should persist
+      stopTimer();
     };
   }, [currentWorkout]);
 
