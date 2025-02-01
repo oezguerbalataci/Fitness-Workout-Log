@@ -2,7 +2,7 @@
   "expo": {
     "name": "PowerLog",
     "slug": "fitnessworkout",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/appicon.png",
     "scheme": "myapp",
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.powerlog",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio"
