@@ -5,7 +5,7 @@
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/appicon.png",
-    "scheme": "myapp",
+    "scheme": "powerlog",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
@@ -22,11 +22,13 @@
       "buildNumber": "2",
       "infoPlist": {
         "UIBackgroundModes": [
+          "audio",
           "audio"
         ],
         "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos.",
         "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos."
-      }
+      },
+      "appleTeamId": "B69N8N46NB"
     },
     "android": {
       "adaptiveIcon": {
@@ -42,7 +44,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
@@ -67,7 +70,19 @@
       },
       "eas": {
         "projectId": "ab5a33fc-b88b-439d-b531-219b312577c4"
+      },
+      "clerk": {
+        "development": {
+          "envFilePath": ".env.development"
+        },
+        "production": {
+          "envFilePath": ".env.production"
+        }
       }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/ab5a33fc-b88b-439d-b531-219b312577c4"
     }
   }
 }

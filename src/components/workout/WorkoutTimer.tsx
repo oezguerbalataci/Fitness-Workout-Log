@@ -78,8 +78,10 @@ export function WorkoutTimer({
 
     const initTimer = async () => {
       if (!isMounted) return;
-      await checkAndRestoreTimer();
+      const restored = await checkAndRestoreTimer();
+      console.log("[WorkoutTimer] Timer restored:", restored);
     };
+
     initTimer();
 
     const subscription = AppState.addEventListener(
@@ -88,7 +90,11 @@ export function WorkoutTimer({
         if (!isMounted) return;
 
         if (nextAppState === "active") {
-          await checkAndRestoreTimer();
+          const restored = await checkAndRestoreTimer();
+          console.log(
+            "[WorkoutTimer] Timer restored after app state change:",
+            restored
+          );
         } else if (
           nextAppState === "background" ||
           nextAppState === "inactive"
@@ -111,6 +117,7 @@ export function WorkoutTimer({
     };
   }, []);
 
+  // Stop timer if workout is cleared
   useEffect(() => {
     if (!currentWorkout && isRunning) {
       if (frameRef.current) {
