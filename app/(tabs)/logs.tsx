@@ -272,6 +272,7 @@ export default function LogsScreen() {
           renderItem={renderItem}
           estimatedItemSize={200}
           keyExtractor={keyExtractor}
+          extraData={isDarkMode}
           ListEmptyComponent={ListEmptyComponent}
           contentContainerStyle={{ paddingVertical: 24 }}
           ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
