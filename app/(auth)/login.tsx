@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -8,6 +9,7 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
+  useColorScheme,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth, useSignIn, useSignUp, useOAuth } from "@clerk/clerk-expo";
@@ -15,14 +17,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback, useState } from "react";
 import * as WebBrowser from "expo-web-browser";
 import { z } from "zod";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import { Image } from "expo-image";
 
 const CLERK_OAUTH_REDIRECT_URL = "powerlog://oauth-native-callback";
 
 const signUpSchema = z.object({
-  firstName: z.string().min(2, "First name is too short"),
-  lastName: z.string().min(2, "Last name is too short"),
+  username: z.string().min(2, "Username is too short"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
@@ -32,19 +34,22 @@ type SignUpForm = z.infer<typeof signUpSchema>;
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
   const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
   const [isRegistering, setIsRegistering] = useState(false);
   const [formErrors, setFormErrors] = useState<Partial<SignUpForm>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState<SignUpForm>({
-    firstName: "",
-    lastName: "",
+    username: "",
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [pendingVerification, setPendingVerification] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
 
   const { signIn, setActive: setSignInActive } = useSignIn();
   const { signUp, setActive: setSignUpActive } = useSignUp();
@@ -78,9 +83,28 @@ export default function LoginScreen() {
   };
 
   const handleError = (error: unknown) => {
-    const err = error as { errors?: Array<{ message: string }> };
-    const errorMessage = err.errors?.[0]?.message || "An error occurred";
-    Alert.alert("Error", errorMessage);
+    console.log("Error details:", error);
+
+    if (typeof error === "string") {
+      Alert.alert("Error", error);
+      return;
+    }
+
+    const err = error as {
+      errors?: Array<{ message?: string; code?: string }> | string;
+      message?: string;
+    };
+
+    if (Array.isArray(err.errors)) {
+      const errorMessage =
+        err.errors[0]?.message || "An error occurred during sign up";
+      Alert.alert("Sign Up Error", errorMessage);
+    } else if (err.message) {
+      Alert.alert("Error", err.message);
+    } else {
+      Alert.alert("Error", "An unexpected error occurred. Please try again.");
+    }
+
     setIsLoading(false);
   };
 
@@ -89,44 +113,63 @@ export default function LoginScreen() {
     setIsLoading(true);
 
     try {
-      if (!signUp) return;
+      if (!signUp) {
+        throw new Error("Sign up is not initialized");
+      }
 
-      const response = await signUp.create({
-        firstName: form.firstName,
-        lastName: form.lastName,
+      // Start the sign-up process
+      await signUp.create({
         emailAddress: form.email,
         password: form.password,
+        username: form.username,
       });
 
-      await response.prepareEmailAddressVerification({
-        strategy: "email_code",
+      // Send verification code
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+
+      // Show verification input
+      setPendingVerification(true);
+      setIsLoading(false);
+    } catch (err) {
+      handleError(err);
+      setIsLoading(false);
+    }
+  }, [signUp, form]);
+
+  const onVerifyCode = useCallback(async () => {
+    if (!verificationCode) {
+      Alert.alert("Error", "Please enter verification code");
+      return;
+    }
+
+    if (!signUp) {
+      Alert.alert("Error", "Sign up is not initialized");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      // Attempt to verify the email address using the code
+      const completeSignUp = await signUp.attemptEmailAddressVerification({
+        code: verificationCode,
       });
 
-      Alert.alert(
-        "Verification Required",
-        "Please check your email for a verification code.",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              // Reset form and switch to login
-              setIsRegistering(false);
-              setForm({
-                firstName: "",
-                lastName: "",
-                email: "",
-                password: "",
-              });
-            },
-          },
-        ]
-      );
+      if (completeSignUp?.status === "complete") {
+        // Sign up is complete, set the session active
+        await setSignUpActive({ session: completeSignUp.createdSessionId });
+
+        // Navigate to the main app
+        router.replace("/(tabs)");
+      } else {
+        Alert.alert("Error", "Invalid verification code");
+      }
     } catch (err) {
       handleError(err);
     } finally {
       setIsLoading(false);
     }
-  }, [signUp, form]);
+  }, [verificationCode, signUp, router]);
 
   const onSignInWithEmail = useCallback(async () => {
     if (!validateForm()) return;
@@ -181,309 +224,291 @@ export default function LoginScreen() {
 
   if (!isLoaded) {
     return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" color="#0066FF" />
+      <View className="flex-1 items-center justify-center bg-black">
+        <ActivityIndicator size="large" color="#fff" />
       </View>
     );
   }
 
+  const bgColor = "bg-black";
+  const textColor = "text-white";
+  const inputBgColor = "bg-white";
+  const secondaryTextColor = "text-gray-400";
+
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <StatusBar style="dark" />
+    <SafeAreaView className="flex-1 bg-black">
+      <StatusBar style="light" />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
         <ScrollView
-          className="flex-1 px-6"
+          className="flex-1"
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="py-12">
-            <Text className="text-4xl font-bold text-gray-900 mb-2">
-              {isRegistering ? "Create Account" : "Welcome Back"}
-            </Text>
-            <Text className="text-lg text-gray-600">
-              {isRegistering
-                ? "Sign up to start tracking your workouts"
-                : "Sign in to continue tracking your workouts"}
-            </Text>
-          </View>
+          {pendingVerification ? (
+            // Verification Code View
+            <View className="py-8">
+              <Text className="text-4xl font-bold text-white mb-2">
+                Verify your email
+              </Text>
+              <Text className="text-lg text-gray-400 mb-8">
+                Please enter the verification code sent to your email
+              </Text>
 
-          {isRegistering ? (
-            <View className="space-y-4">
-              <View className="space-y-2">
-                <Text className="text-gray-600 text-base font-medium px-1">
-                  First Name
+              <View>
+                <Text className="text-gray-400 text-base mb-2">
+                  Verification Code
                 </Text>
-                <TextInput
-                  placeholder="Enter your first name"
-                  value={form.firstName}
-                  onChangeText={(text: string) =>
-                    setForm((prev) => ({ ...prev, firstName: text }))
-                  }
-                  className={`w-full px-4 py-3 border rounded-xl bg-white ${
-                    formErrors.firstName ? "border-red-500" : "border-gray-200"
-                  }`}
-                  placeholderTextColor="#9ca3af"
-                />
-                {formErrors.firstName && (
-                  <Text className="text-red-500 text-sm px-1">
-                    {formErrors.firstName}
-                  </Text>
-                )}
-              </View>
-
-              <View className="space-y-2">
-                <Text className="text-gray-600 text-base font-medium px-1">
-                  Last Name
-                </Text>
-                <TextInput
-                  placeholder="Enter your last name"
-                  value={form.lastName}
-                  onChangeText={(text: string) =>
-                    setForm((prev) => ({ ...prev, lastName: text }))
-                  }
-                  className={`w-full px-4 py-3 border rounded-xl bg-white ${
-                    formErrors.lastName ? "border-red-500" : "border-gray-200"
-                  }`}
-                  placeholderTextColor="#9ca3af"
-                />
-                {formErrors.lastName && (
-                  <Text className="text-red-500 text-sm px-1">
-                    {formErrors.lastName}
-                  </Text>
-                )}
-              </View>
-
-              <View className="space-y-2">
-                <Text className="text-gray-600 text-base font-medium px-1">
-                  Email
-                </Text>
-                <TextInput
-                  placeholder="Enter your email"
-                  value={form.email}
-                  onChangeText={(text: string) =>
-                    setForm((prev) => ({ ...prev, email: text }))
-                  }
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  className={`w-full px-4 py-3 border rounded-xl bg-white ${
-                    formErrors.email ? "border-red-500" : "border-gray-200"
-                  }`}
-                  placeholderTextColor="#9ca3af"
-                />
-                {formErrors.email && (
-                  <Text className="text-red-500 text-sm px-1">
-                    {formErrors.email}
-                  </Text>
-                )}
-              </View>
-
-              <View className="space-y-2">
-                <Text className="text-gray-600 text-base font-medium px-1">
-                  Password
-                </Text>
-                <View className="relative">
-                  <TextInput
-                    placeholder="Create a password"
-                    value={form.password}
-                    onChangeText={(text: string) =>
-                      setForm((prev) => ({ ...prev, password: text }))
-                    }
-                    secureTextEntry={!showPassword}
-                    className={`w-full px-4 py-3 border rounded-xl bg-white ${
-                      formErrors.password ? "border-red-500" : "border-gray-200"
-                    }`}
-                    placeholderTextColor="#9ca3af"
+                <View className="bg-white rounded-2xl px-4 py-4 flex-row items-center">
+                  <Ionicons
+                    name="key-outline"
+                    size={20}
+                    color="#666"
+                    className="mr-2"
                   />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-3"
-                  >
-                    <Ionicons
-                      name={showPassword ? "eye-off" : "eye"}
-                      size={24}
-                      color="#6b7280"
-                    />
-                  </TouchableOpacity>
+                  <TextInput
+                    placeholder="Enter verification code"
+                    value={verificationCode}
+                    onChangeText={setVerificationCode}
+                    keyboardType="number-pad"
+                    className="flex-1 text-black text-base"
+                    placeholderTextColor="#666"
+                    autoCapitalize="none"
+                  />
                 </View>
-                {formErrors.password && (
-                  <Text className="text-red-500 text-sm px-1">
-                    {formErrors.password}
-                  </Text>
-                )}
               </View>
 
               <TouchableOpacity
-                onPress={onSignUpWithEmail}
+                className="bg-[#4CAF50] rounded-2xl py-4 mt-6"
+                onPress={onVerifyCode}
                 disabled={isLoading}
-                className="w-full bg-[#0066FF] py-4 rounded-full mt-4"
               >
                 {isLoading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="text-center font-semibold text-white text-lg">
-                    Create Account
+                  <Text className="text-white text-center font-semibold text-lg">
+                    Verify Email
                   </Text>
                 )}
               </TouchableOpacity>
             </View>
           ) : (
-            <View className="space-y-4">
-              <View className="space-y-2">
-                <Text className="text-gray-600 text-base font-medium px-1">
-                  Email
+            <View className="flex-1 px-5 mt-6">
+              <View className="mb-12">
+                <Text className="text-4xl font-bold text-white mb-2">
+                  Go ahead and set up your account
                 </Text>
-                <TextInput
-                  placeholder="Enter email address"
-                  value={form.email}
-                  onChangeText={(text: string) =>
-                    setForm((prev) => ({ ...prev, email: text }))
-                  }
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  className={`w-full px-4 py-3 border rounded-xl bg-white ${
-                    formErrors.email ? "border-red-500" : "border-gray-200"
-                  }`}
-                  placeholderTextColor="#9ca3af"
-                />
-                {formErrors.email && (
-                  <Text className="text-red-500 text-sm px-1">
-                    {formErrors.email}
-                  </Text>
-                )}
+                <Text className="text-lg text-gray-500">
+                  Sign {isRegistering ? "up" : "in"} to enjoy the best managing
+                  experience
+                </Text>
               </View>
 
-              <View className="space-y-2">
-                <Text className="text-gray-600 text-base font-medium px-1">
-                  Password
-                </Text>
-                <View className="relative">
-                  <TextInput
-                    placeholder="Enter your password"
-                    value={form.password}
-                    onChangeText={(text: string) =>
-                      setForm((prev) => ({ ...prev, password: text }))
-                    }
-                    secureTextEntry={!showPassword}
-                    className={`w-full px-4 py-3 border rounded-xl bg-white ${
-                      formErrors.password ? "border-red-500" : "border-gray-200"
-                    }`}
-                    placeholderTextColor="#9ca3af"
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-3"
-                  >
-                    <Ionicons
-                      name={showPassword ? "eye-off" : "eye"}
-                      size={24}
-                      color="#6b7280"
-                    />
-                  </TouchableOpacity>
-                </View>
-                {formErrors.password && (
-                  <Text className="text-red-500 text-sm px-1">
-                    {formErrors.password}
-                  </Text>
-                )}
-              </View>
-
-              <View className="flex-row justify-between items-center">
+              {/* Toggle Buttons */}
+              <View className="bg-white/10 rounded-full p-1 flex-row mb-8">
                 <TouchableOpacity
-                  onPress={() => setRememberMe(!rememberMe)}
-                  className="flex-row items-center space-x-2"
+                  className={`flex-1 py-3 rounded-full ${
+                    !isRegistering ? "bg-white" : "bg-transparent"
+                  }`}
+                  onPress={() => setIsRegistering(false)}
                 >
-                  <View
-                    className={`w-5 h-5 rounded-sm border flex items-center justify-center ${
-                      rememberMe
-                        ? "bg-[#0066FF] border-[#0066FF]"
-                        : "border-gray-300"
+                  <Text
+                    className={`text-center font-medium ${
+                      !isRegistering ? "text-black" : "text-white/50"
                     }`}
                   >
-                    {rememberMe && (
-                      <Ionicons name="checkmark" size={16} color="white" />
-                    )}
-                  </View>
-                  <Text className="text-gray-600">Remember Me?</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                  <Text className="text-gray-600">Forgot Password</Text>
-                </TouchableOpacity>
-              </View>
-
-              <TouchableOpacity
-                onPress={onSignInWithEmail}
-                disabled={isLoading}
-                className="w-full bg-[#0066FF] py-4 rounded-full mt-4"
-              >
-                {isLoading ? (
-                  <ActivityIndicator color="white" />
-                ) : (
-                  <Text className="text-center font-semibold text-white text-lg">
                     Login
                   </Text>
-                )}
-              </TouchableOpacity>
-
-              <View className="mt-6 space-y-4">
-                <View className="flex-row items-center">
-                  <View className="flex-1 h-[1px] bg-gray-200" />
-                  <Text className="mx-4 text-gray-500 text-sm">
-                    or continue with
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className={`flex-1 py-3 rounded-full ${
+                    isRegistering ? "bg-white" : "bg-transparent"
+                  }`}
+                  onPress={() => setIsRegistering(true)}
+                >
+                  <Text
+                    className={`text-center font-medium ${
+                      isRegistering ? "text-black" : "text-white/50"
+                    }`}
+                  >
+                    Register
                   </Text>
-                  <View className="flex-1 h-[1px] bg-gray-200" />
+                </TouchableOpacity>
+              </View>
+
+              <View className="bg-white rounded-3xl p-6">
+                {isRegistering && (
+                  <View className="mb-4">
+                    <Text className="text-gray-500 text-base mb-2">
+                      Username
+                    </Text>
+                    <View className="flex-row items-center bg-gray-50 rounded-2xl p-4 shadow-sm">
+                      <Ionicons
+                        name="person-outline"
+                        size={20}
+                        color="#4CAF50"
+                        style={{ marginRight: 8 }}
+                      />
+                      <TextInput
+                        placeholder="Enter your username"
+                        value={form.username}
+                        onChangeText={(text: string) =>
+                          setForm((prev) => ({ ...prev, username: text }))
+                        }
+                        className="flex-1 text-black text-base"
+                        placeholderTextColor="#9ca3af"
+                        autoCapitalize="none"
+                      />
+                    </View>
+                    {formErrors.username && (
+                      <Text className="text-red-500 text-sm mt-1">
+                        {formErrors.username}
+                      </Text>
+                    )}
+                  </View>
+                )}
+
+                <View className="mb-4">
+                  <Text className="text-gray-500 text-base mb-2">
+                    Email Address
+                  </Text>
+                  <View className="flex-row items-center bg-gray-50 rounded-2xl p-4 shadow-sm">
+                    <Ionicons
+                      name="mail-outline"
+                      size={20}
+                      color="#4CAF50"
+                      style={{ marginRight: 8 }}
+                    />
+                    <TextInput
+                      placeholder="Enter your email"
+                      value={form.email}
+                      onChangeText={(text: string) =>
+                        setForm((prev) => ({ ...prev, email: text }))
+                      }
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      className="flex-1 text-black text-base"
+                      placeholderTextColor="#9ca3af"
+                    />
+                  </View>
+                  {formErrors.email && (
+                    <Text className="text-red-500 text-sm mt-1">
+                      {formErrors.email}
+                    </Text>
+                  )}
                 </View>
 
-                <View className="flex-row space-x-4">
-                  <TouchableOpacity
-                    onPress={onSignInWithGoogle}
-                    disabled={isLoading}
-                    className="flex-1 flex-row items-center justify-center space-x-2 py-3 border border-gray-200 rounded-full"
-                  >
-                    <Ionicons name="logo-google" size={20} color="#000" />
-                    <Text className="font-medium">Google</Text>
-                  </TouchableOpacity>
+                <View className="mb-6">
+                  <Text className="text-gray-500 text-base mb-2">Password</Text>
+                  <View className="flex-row items-center bg-gray-50 rounded-2xl p-4 shadow-sm">
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={20}
+                      color="#4CAF50"
+                      style={{ marginRight: 8 }}
+                    />
+                    <TextInput
+                      placeholder="Enter your password"
+                      value={form.password}
+                      onChangeText={(text: string) =>
+                        setForm((prev) => ({ ...prev, password: text }))
+                      }
+                      secureTextEntry={!showPassword}
+                      className="flex-1 text-black text-base"
+                      placeholderTextColor="#9ca3af"
+                    />
+                    <TouchableOpacity
+                      onPress={() => setShowPassword(!showPassword)}
+                    >
+                      <Ionicons
+                        name={showPassword ? "eye-off-outline" : "eye-outline"}
+                        size={20}
+                        color="#9ca3af"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  {formErrors.password && (
+                    <Text className="text-red-500 text-sm mt-1">
+                      {formErrors.password}
+                    </Text>
+                  )}
+                </View>
 
+                <View className="flex-row justify-between items-center mb-6">
                   <TouchableOpacity
-                    onPress={onSignInWithApple}
-                    disabled={isLoading}
-                    className="flex-1 flex-row items-center justify-center space-x-2 py-3 border border-gray-200 rounded-full"
+                    className="flex-row items-center"
+                    onPress={() => setRememberMe(!rememberMe)}
                   >
-                    <Ionicons name="logo-apple" size={20} color="#000" />
-                    <Text className="font-medium">Apple</Text>
+                    <View
+                      className={`w-5 h-5 rounded border ${
+                        rememberMe
+                          ? "bg-[#4CAF50] border-[#4CAF50]"
+                          : "border-gray-300"
+                      } mr-2 items-center justify-center`}
+                    >
+                      {rememberMe && (
+                        <Ionicons name="checkmark" size={16} color="white" />
+                      )}
+                    </View>
+                    <Text className="text-gray-500">Remember me</Text>
                   </TouchableOpacity>
+                  <TouchableOpacity>
+                    <Text className="text-[#4CAF50]">Forgot Password?</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity
+                  className="bg-[#4CAF50] rounded-full py-4 mb-6"
+                  onPress={
+                    isRegistering ? onSignUpWithEmail : onSignInWithEmail
+                  }
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <Text className="text-white text-center font-semibold text-lg">
+                      {isRegistering ? "Sign Up" : "Login"}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+
+                <View>
+                  <View className="flex-row items-center mb-6">
+                    <View className="flex-1 h-[1px] bg-gray-200" />
+                    <Text className="mx-4 text-gray-500">Or login with</Text>
+                    <View className="flex-1 h-[1px] bg-gray-200" />
+                  </View>
+
+                  <View className="flex-row gap-4">
+                    <TouchableOpacity
+                      className="flex-1 flex-row items-center justify-center py-3 border border-gray-200 rounded-full"
+                      onPress={onSignInWithGoogle}
+                    >
+                      <MaterialCommunityIcons
+                        name="google"
+                        size={24}
+                        color="#000"
+                      />
+                      <Text className="ml-2 font-medium text-black">
+                        Google
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      className="flex-1 flex-row items-center justify-center py-3 border border-gray-200 rounded-full"
+                      onPress={onSignInWithApple}
+                    >
+                      <Ionicons name="logo-apple" size={24} color="#000" />
+                      <Text className="ml-2 font-medium text-black">Apple</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
           )}
-
-          <View className="py-8">
-            <TouchableOpacity
-              onPress={() => {
-                setIsRegistering(!isRegistering);
-                setForm({
-                  firstName: "",
-                  lastName: "",
-                  email: "",
-                  password: "",
-                });
-                setFormErrors({});
-              }}
-              className="flex-row justify-center"
-            >
-              <Text className="text-gray-600">
-                {isRegistering
-                  ? "Already have an account? "
-                  : "New to PowerLog? "}
-              </Text>
-              <Text className="text-[#0066FF] font-medium">
-                {isRegistering ? "Login" : "Create Account"}
-              </Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

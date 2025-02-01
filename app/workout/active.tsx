@@ -66,11 +66,220 @@ import { ExerciseList } from "../../src/components/active/ExerciseList";
 import { exercises as defaultExercises } from "../../src/data/exercises";
 import { QuitWorkoutDialog } from "../../src/components/active/QuitWorkoutDialog";
 import { AppState } from "react-native";
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
+import { FinishWorkoutDialog } from "../../src/components/active/FinishWorkoutDialog";
 
 interface SetData {
   weight: number;
   reps: number;
   rpe?: number;
+}
+
+const styles = StyleSheet.create({
+  lightShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  floatingTimer: {
+    position: "absolute",
+    right: 16,
+    zIndex: 50,
+  },
+  floatingFinish: {
+    position: "absolute",
+    right: 16,
+    bottom: 60,
+    zIndex: 50,
+  },
+  floatingShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  draggableCard: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+});
+
+interface DraggableExerciseCardProps {
+  exercise: {
+    id: string;
+    name: string;
+  };
+  positions: Animated.SharedValue<Record<string, number>>;
+  scrollY: Animated.SharedValue<number>;
+  isDarkMode: boolean;
+  index: number;
+  count: number;
+}
+
+function DraggableExerciseCard({
+  exercise,
+  positions,
+  scrollY,
+  isDarkMode,
+  index,
+  count,
+}: DraggableExerciseCardProps) {
+  const translateY = useSharedValue(0);
+  const isActive = useSharedValue(false);
+  const currentPosition = useSharedValue(index);
+  const CARD_HEIGHT = 56;
+
+  const gesture = Gesture.Pan()
+    .onStart(() => {
+      isActive.value = true;
+      currentPosition.value = positions.value[exercise.id];
+    })
+    .onUpdate((event) => {
+      translateY.value = event.translationY;
+      const newPosition = Math.round(
+        (currentPosition.value * CARD_HEIGHT + event.translationY) / CARD_HEIGHT
+      );
+
+      // Clamp the position between 0 and count-1
+      const clampedPosition = Math.max(0, Math.min(count - 1, newPosition));
+
+      if (clampedPosition !== positions.value[exercise.id]) {
+        const oldPosition = positions.value[exercise.id];
+        const newPositions = { ...positions.value };
+
+        Object.keys(positions.value).forEach((key) => {
+          const pos = positions.value[key];
+          if (key === exercise.id) {
+            newPositions[key] = clampedPosition;
+          } else if (
+            oldPosition < clampedPosition &&
+            pos > oldPosition &&
+            pos <= clampedPosition
+          ) {
+            newPositions[key] = pos - 1;
+          } else if (
+            oldPosition > clampedPosition &&
+            pos < oldPosition &&
+            pos >= clampedPosition
+          ) {
+            newPositions[key] = pos + 1;
+          }
+        });
+
+        positions.value = newPositions;
+      }
+    })
+    .onEnd(() => {
+      const finalPosition = positions.value[exercise.id];
+      translateY.value = withSpring(0, {
+        damping: 20,
+        stiffness: 200,
+      });
+      isActive.value = false;
+    });
+
+  const animatedStyle = useAnimatedStyle(() => {
+    const position = positions.value[exercise.id];
+    const top = position * CARD_HEIGHT;
+
+    return {
+      position: "absolute",
+      left: 0,
+      right: 0,
+      top,
+      zIndex: isActive.value ? 1000 : 1,
+      transform: [
+        { translateY: translateY.value },
+        {
+          scale: withSpring(isActive.value ? 1.03 : 1, {
+            mass: 0.5,
+            damping: 15,
+            stiffness: 200,
+          }),
+        },
+      ],
+    };
+  });
+
+  const containerStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: isActive.value
+        ? withSpring(
+            isDarkMode ? "rgba(31, 41, 55, 0.9)" : "rgba(255, 255, 255, 0.9)",
+            {
+              mass: 0.5,
+              damping: 15,
+              stiffness: 200,
+            }
+          )
+        : withSpring(
+            isDarkMode ? "rgba(31, 41, 55, 0.8)" : "rgba(255, 255, 255, 1)",
+            {
+              mass: 0.5,
+              damping: 15,
+              stiffness: 200,
+            }
+          ),
+      transform: [
+        {
+          scale: withSpring(isActive.value ? 1.02 : 1, {
+            mass: 0.5,
+            damping: 15,
+            stiffness: 200,
+          }),
+        },
+      ],
+    };
+  });
+
+  return (
+    <GestureDetector gesture={gesture}>
+      <Animated.View style={[animatedStyle]} className="px-4 mb-1">
+        <Animated.View
+          className={`py-2.5 px-4 rounded-lg overflow-hidden ${
+            isDarkMode ? "bg-gray-800/80" : "bg-white"
+          }`}
+          style={[isDarkMode ? {} : styles.draggableCard, containerStyle]}
+        >
+          <View className="flex-row items-center justify-between">
+            <View className="flex-1">
+              <Text
+                className={`text-sm font-medium ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                {exercise.name}
+              </Text>
+            </View>
+            <MaterialIcons
+              name="drag-handle"
+              size={20}
+              color={isDarkMode ? "#9CA3AF" : "#6B7280"}
+            />
+          </View>
+        </Animated.View>
+      </Animated.View>
+    </GestureDetector>
+  );
 }
 
 export default function ActiveWorkoutScreen() {
@@ -122,6 +331,13 @@ export default function ActiveWorkoutScreen() {
     exerciseId: string;
     setIndex: number;
   } | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const positions = useSharedValue(
+    Object.fromEntries(
+      activeExercises.map((exercise, index) => [exercise.id, index])
+    )
+  );
+  const [showFinishDialog, setShowFinishDialog] = useState(false);
 
   // Cleanup function for unmounting
   useEffect(() => {
@@ -308,6 +524,18 @@ export default function ActiveWorkoutScreen() {
     []
   );
 
+  // Add this function to handle exercise reordering
+  const handleReorderComplete = useCallback(() => {
+    // Get the new order of exercises based on positions
+    const newOrder = Object.entries(positions.value)
+      .sort(([, a], [, b]) => a - b)
+      .map(([id]) => id);
+
+    // Update the workout store with the new order
+    useWorkoutStore.getState().reorderExercises(newOrder);
+    setIsEditMode(false);
+  }, [positions]);
+
   if (!template || !workout) {
     return <WorkoutNotFound isDarkMode={isDarkMode} />;
   }
@@ -450,6 +678,38 @@ export default function ActiveWorkoutScreen() {
         </View>
       </Animated.View>
 
+      {/* Floating Finish Button */}
+      <Animated.View
+        style={[
+          styles.floatingFinish,
+          useAnimatedStyle(() => {
+            const opacity = interpolate(
+              scrollY.value,
+              [0, headerHeight],
+              [0, 1],
+              Extrapolate.CLAMP
+            );
+            return {
+              opacity,
+            };
+          }),
+        ]}
+      >
+        <TouchableOpacity
+          onPress={() => setShowFinishDialog(true)}
+          className={`h-14 w-14 items-center justify-center rounded-full ${
+            isDarkMode ? "bg-white" : "bg-black"
+          }`}
+          style={styles.floatingShadow}
+        >
+          <MaterialIcons
+            name="check"
+            size={28}
+            color={isDarkMode ? "#000" : "#fff"}
+          />
+        </TouchableOpacity>
+      </Animated.View>
+
       {/* Exercise List Header */}
       <View className="px-4 py-4">
         <View className="flex-row items-center justify-between">
@@ -460,243 +720,54 @@ export default function ActiveWorkoutScreen() {
           >
             Exercises
           </Text>
-          <TouchableOpacity
-            className={`flex-row items-center gap-2 py-2 px-3 rounded-full ${
-              isDarkMode ? "bg-gray-800" : "bg-gray-100"
-            }`}
-          >
-            <MaterialIcons
-              name="add"
-              size={20}
-              color={isDarkMode ? "#fff" : "#000"}
-            />
-            <Text
-              className={`font-medium ${
-                isDarkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              Add Exercise
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Exercise List */}
-      <ScrollView
-        className="flex-1 px-4"
-        showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-      >
-        <View className="gap-4 pb-6">
-          {activeExercises.map((exercise, index) => (
-            <Animated.View
-              key={exercise.id}
-              entering={FadeIn.delay(index * 100)}
-              layout={Layout.springify()}
-              className={`p-5 rounded-2xl overflow-hidden ${
-                isDarkMode ? "bg-gray-800/80" : "bg-white"
-              }`}
-              style={isDarkMode ? {} : styles.lightShadow}
-            >
-              {/* Decorative Circle */}
-              <View
-                className="absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-10"
-                style={{
-                  backgroundColor: isDarkMode ? "#ffffff" : "#000000",
-                }}
-              />
-
-              {/* Exercise Header */}
-              <View className="flex-row items-center justify-between mb-4">
-                <View className="flex-1">
-                  <Text
-                    className={`text-lg font-medium ${
-                      isDarkMode ? "text-white" : "text-gray-900"
-                    }`}
-                  >
-                    {exercise.name}
-                  </Text>
-                  <Text
-                    className={`text-sm mt-1 ${
-                      isDarkMode ? "text-gray-400" : "text-gray-500"
-                    }`}
-                  >
-                    {exerciseSets[exercise.id]?.length || 0} sets completed
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => handleRemoveExercise(exercise.id)}
-                  className={`h-8 w-8 items-center justify-center rounded-full ${
-                    isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
+          <View className="flex-row gap-2">
+            {!isEditMode && (
+              <TouchableOpacity
+                className={`flex-row items-center gap-2 py-2 px-3 rounded-full ${
+                  isDarkMode ? "bg-gray-800" : "bg-gray-100"
+                }`}
+                onPress={() => setIsEditMode(true)}
+              >
+                <MaterialIcons
+                  name="reorder"
+                  size={20}
+                  color={isDarkMode ? "#fff" : "#000"}
+                />
+                <Text
+                  className={`font-medium ${
+                    isDarkMode ? "text-white" : "text-gray-900"
                   }`}
                 >
-                  <MaterialIcons
-                    name="close"
-                    size={20}
-                    color={isDarkMode ? "#9CA3AF" : "#6B7280"}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              {/* Sets */}
-              <View className="gap-3">
-                {exerciseSets[exercise.id]?.map((set, setIndex) => (
-                  <Animated.View
-                    key={setIndex}
-                    entering={SlideInRight.delay(setIndex * 50)}
-                    exiting={SlideOutRight}
-                    layout={Layout.springify()}
-                    className={`flex-row items-center gap-3 p-3 rounded-xl ${
-                      isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
-                    }`}
-                  >
-                    <Text
-                      className={`w-8 text-center font-medium ${
-                        isDarkMode ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      {setIndex + 1}
-                    </Text>
-                    <View className="flex-1 flex-row items-center gap-3">
-                      <View className="flex-1">
-                        <TextInput
-                          value={localInputs[exercise.id]?.[setIndex]?.weight}
-                          onChangeText={(value) =>
-                            handleSetInputChange(
-                              exercise.id,
-                              setIndex,
-                              "weight",
-                              value
-                            )
-                          }
-                          onBlur={() =>
-                            handleSetInputBlur(
-                              exercise.id,
-                              setIndex,
-                              "weight",
-                              localInputs[exercise.id]?.[setIndex]?.weight || ""
-                            )
-                          }
-                          keyboardType="numeric"
-                          placeholder="0"
-                          placeholderTextColor={
-                            isDarkMode ? "#6B7280" : "#9CA3AF"
-                          }
-                          className={`text-base text-center py-2 px-3 rounded-lg ${
-                            isDarkMode
-                              ? "bg-gray-800 text-white"
-                              : "bg-white text-gray-900"
-                          }`}
-                        />
-                        <Text
-                          className={`text-xs text-center mt-1 ${
-                            isDarkMode ? "text-gray-500" : "text-gray-400"
-                          }`}
-                        >
-                          kg
-                        </Text>
-                      </View>
-                      <View className="flex-1">
-                        <TextInput
-                          value={localInputs[exercise.id]?.[setIndex]?.reps}
-                          onChangeText={(value) =>
-                            handleSetInputChange(
-                              exercise.id,
-                              setIndex,
-                              "reps",
-                              value
-                            )
-                          }
-                          onBlur={() =>
-                            handleSetInputBlur(
-                              exercise.id,
-                              setIndex,
-                              "reps",
-                              localInputs[exercise.id]?.[setIndex]?.reps || ""
-                            )
-                          }
-                          keyboardType="numeric"
-                          placeholder="0"
-                          placeholderTextColor={
-                            isDarkMode ? "#6B7280" : "#9CA3AF"
-                          }
-                          className={`text-base text-center py-2 px-3 rounded-lg ${
-                            isDarkMode
-                              ? "bg-gray-800 text-white"
-                              : "bg-white text-gray-900"
-                          }`}
-                        />
-                        <Text
-                          className={`text-xs text-center mt-1 ${
-                            isDarkMode ? "text-gray-500" : "text-gray-400"
-                          }`}
-                        >
-                          reps
-                        </Text>
-                      </View>
-                      <View className="flex-1">
-                        <TextInput
-                          value={localInputs[exercise.id]?.[setIndex]?.rpe}
-                          onChangeText={(value) =>
-                            handleSetInputChange(
-                              exercise.id,
-                              setIndex,
-                              "rpe",
-                              value
-                            )
-                          }
-                          onBlur={() =>
-                            handleSetInputBlur(
-                              exercise.id,
-                              setIndex,
-                              "rpe",
-                              localInputs[exercise.id]?.[setIndex]?.rpe || ""
-                            )
-                          }
-                          keyboardType="numeric"
-                          placeholder="0"
-                          placeholderTextColor={
-                            isDarkMode ? "#6B7280" : "#9CA3AF"
-                          }
-                          className={`text-base text-center py-2 px-3 rounded-lg ${
-                            isDarkMode
-                              ? "bg-gray-800 text-white"
-                              : "bg-white text-gray-900"
-                          }`}
-                          maxLength={2}
-                        />
-                        <Text
-                          className={`text-xs text-center mt-1 ${
-                            isDarkMode ? "text-gray-500" : "text-gray-400"
-                          }`}
-                        >
-                          RPE
-                        </Text>
-                      </View>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => handleSetRemove(exercise.id, setIndex)}
-                      className={`h-8 w-8 items-center justify-center rounded-full ${
-                        isDarkMode ? "bg-gray-800" : "bg-white"
-                      }`}
-                    >
-                      <MaterialIcons
-                        name="remove"
-                        size={20}
-                        color={isDarkMode ? "#9CA3AF" : "#6B7280"}
-                      />
-                    </TouchableOpacity>
-                  </Animated.View>
-                ))}
-              </View>
-
-              {/* Add Set Button */}
+                  Reorder
+                </Text>
+              </TouchableOpacity>
+            )}
+            {isEditMode ? (
               <TouchableOpacity
-                onPress={() => handleSetAdd(exercise.id)}
-                className={`mt-3 flex-row items-center justify-center py-3 rounded-xl ${
-                  isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
+                className={`flex-row items-center gap-2 py-2 px-3 rounded-full ${
+                  isDarkMode ? "bg-gray-800" : "bg-gray-100"
                 }`}
+                onPress={handleReorderComplete}
+              >
+                <MaterialIcons
+                  name="check"
+                  size={20}
+                  color={isDarkMode ? "#fff" : "#000"}
+                />
+                <Text
+                  className={`font-medium ${
+                    isDarkMode ? "text-white" : "text-gray-900"
+                  }`}
+                >
+                  Done
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                className={`flex-row items-center gap-2 py-2 px-3 rounded-full ${
+                  isDarkMode ? "bg-gray-800" : "bg-gray-100"
+                }`}
+                onPress={() => router.push("/workout/exercises")}
               >
                 <MaterialIcons
                   name="add"
@@ -704,18 +775,288 @@ export default function ActiveWorkoutScreen() {
                   color={isDarkMode ? "#fff" : "#000"}
                 />
                 <Text
-                  className={`ml-2 font-medium ${
+                  className={`font-medium ${
                     isDarkMode ? "text-white" : "text-gray-900"
                   }`}
                 >
-                  Add Set
+                  Add Exercise
                 </Text>
               </TouchableOpacity>
-            </Animated.View>
-          ))}
+            )}
+          </View>
+        </View>
+      </View>
+
+      {/* Exercise List */}
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        scrollEnabled={!isEditMode}
+      >
+        <View
+          style={{
+            height: isEditMode ? activeExercises.length * 56 + 16 : "auto",
+            paddingBottom: 24,
+          }}
+        >
+          {isEditMode ? (
+            <View style={{ position: "relative" }}>
+              {activeExercises.map((exercise, index) => (
+                <DraggableExerciseCard
+                  key={exercise.id}
+                  exercise={exercise}
+                  positions={positions}
+                  scrollY={scrollY}
+                  isDarkMode={isDarkMode}
+                  index={index}
+                  count={activeExercises.length}
+                />
+              ))}
+            </View>
+          ) : (
+            <View className="gap-4 px-4">
+              {activeExercises.map((exercise, index) => (
+                <Animated.View
+                  key={exercise.id}
+                  entering={FadeIn.delay(index * 100)}
+                  layout={Layout.springify()}
+                  className={`p-5 rounded-2xl overflow-hidden ${
+                    isDarkMode ? "bg-gray-800/80" : "bg-white"
+                  }`}
+                  style={isDarkMode ? {} : styles.lightShadow}
+                >
+                  {/* Decorative Circle */}
+                  <View
+                    className="absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-10"
+                    style={{
+                      backgroundColor: isDarkMode ? "#ffffff" : "#000000",
+                    }}
+                  />
+
+                  {/* Exercise Header */}
+                  <View className="flex-row items-center justify-between mb-4">
+                    <View className="flex-1">
+                      <Text
+                        className={`text-lg font-medium ${
+                          isDarkMode ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {exercise.name}
+                      </Text>
+                      <Text
+                        className={`text-sm mt-1 ${
+                          isDarkMode ? "text-gray-400" : "text-gray-500"
+                        }`}
+                      >
+                        {exerciseSets[exercise.id]?.length || 0} sets completed
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleRemoveExercise(exercise.id)}
+                      className={`h-8 w-8 items-center justify-center rounded-full ${
+                        isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
+                      }`}
+                    >
+                      <MaterialIcons
+                        name="close"
+                        size={20}
+                        color={isDarkMode ? "#9CA3AF" : "#6B7280"}
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Sets */}
+                  <View className="gap-3">
+                    {exerciseSets[exercise.id]?.map((set, setIndex) => (
+                      <Animated.View
+                        key={setIndex}
+                        entering={SlideInRight.delay(setIndex * 50)}
+                        exiting={SlideOutRight}
+                        layout={Layout.springify()}
+                        className={`flex-row items-center gap-3 p-3 rounded-xl ${
+                          isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
+                        }`}
+                      >
+                        <Text
+                          className={`w-8 text-center font-medium ${
+                            isDarkMode ? "text-gray-400" : "text-gray-500"
+                          }`}
+                        >
+                          {setIndex + 1}
+                        </Text>
+                        <View className="flex-1 flex-row items-center gap-3">
+                          <View className="flex-1">
+                            <TextInput
+                              value={
+                                localInputs[exercise.id]?.[setIndex]?.weight
+                              }
+                              onChangeText={(value) =>
+                                handleSetInputChange(
+                                  exercise.id,
+                                  setIndex,
+                                  "weight",
+                                  value
+                                )
+                              }
+                              onBlur={() =>
+                                handleSetInputBlur(
+                                  exercise.id,
+                                  setIndex,
+                                  "weight",
+                                  localInputs[exercise.id]?.[setIndex]
+                                    ?.weight || ""
+                                )
+                              }
+                              keyboardType="numeric"
+                              placeholder="0"
+                              placeholderTextColor={
+                                isDarkMode ? "#6B7280" : "#9CA3AF"
+                              }
+                              className={`text-base text-center py-2 px-3 rounded-lg ${
+                                isDarkMode
+                                  ? "bg-gray-800 text-white"
+                                  : "bg-white text-gray-900"
+                              }`}
+                            />
+                            <Text
+                              className={`text-xs text-center mt-1 ${
+                                isDarkMode ? "text-gray-500" : "text-gray-400"
+                              }`}
+                            >
+                              kg
+                            </Text>
+                          </View>
+                          <View className="flex-1">
+                            <TextInput
+                              value={localInputs[exercise.id]?.[setIndex]?.reps}
+                              onChangeText={(value) =>
+                                handleSetInputChange(
+                                  exercise.id,
+                                  setIndex,
+                                  "reps",
+                                  value
+                                )
+                              }
+                              onBlur={() =>
+                                handleSetInputBlur(
+                                  exercise.id,
+                                  setIndex,
+                                  "reps",
+                                  localInputs[exercise.id]?.[setIndex]?.reps ||
+                                    ""
+                                )
+                              }
+                              keyboardType="numeric"
+                              placeholder="0"
+                              placeholderTextColor={
+                                isDarkMode ? "#6B7280" : "#9CA3AF"
+                              }
+                              className={`text-base text-center py-2 px-3 rounded-lg ${
+                                isDarkMode
+                                  ? "bg-gray-800 text-white"
+                                  : "bg-white text-gray-900"
+                              }`}
+                            />
+                            <Text
+                              className={`text-xs text-center mt-1 ${
+                                isDarkMode ? "text-gray-500" : "text-gray-400"
+                              }`}
+                            >
+                              reps
+                            </Text>
+                          </View>
+                          <View className="flex-1">
+                            <TextInput
+                              value={localInputs[exercise.id]?.[setIndex]?.rpe}
+                              onChangeText={(value) =>
+                                handleSetInputChange(
+                                  exercise.id,
+                                  setIndex,
+                                  "rpe",
+                                  value
+                                )
+                              }
+                              onBlur={() =>
+                                handleSetInputBlur(
+                                  exercise.id,
+                                  setIndex,
+                                  "rpe",
+                                  localInputs[exercise.id]?.[setIndex]?.rpe ||
+                                    ""
+                                )
+                              }
+                              keyboardType="numeric"
+                              placeholder="0"
+                              placeholderTextColor={
+                                isDarkMode ? "#6B7280" : "#9CA3AF"
+                              }
+                              className={`text-base text-center py-2 px-3 rounded-lg ${
+                                isDarkMode
+                                  ? "bg-gray-800 text-white"
+                                  : "bg-white text-gray-900"
+                              }`}
+                              maxLength={2}
+                            />
+                            <Text
+                              className={`text-xs text-center mt-1 ${
+                                isDarkMode ? "text-gray-500" : "text-gray-400"
+                              }`}
+                            >
+                              RPE
+                            </Text>
+                          </View>
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => handleSetRemove(exercise.id, setIndex)}
+                          className={`h-8 w-8 items-center justify-center rounded-full ${
+                            isDarkMode ? "bg-gray-800" : "bg-white"
+                          }`}
+                        >
+                          <MaterialIcons
+                            name="remove"
+                            size={20}
+                            color={isDarkMode ? "#9CA3AF" : "#6B7280"}
+                          />
+                        </TouchableOpacity>
+                      </Animated.View>
+                    ))}
+                  </View>
+
+                  {/* Add Set Button */}
+                  <TouchableOpacity
+                    onPress={() => handleSetAdd(exercise.id)}
+                    className={`mt-3 flex-row items-center justify-center py-3 rounded-xl ${
+                      isDarkMode ? "bg-gray-700/50" : "bg-gray-50"
+                    }`}
+                  >
+                    <MaterialIcons
+                      name="add"
+                      size={20}
+                      color={isDarkMode ? "#fff" : "#000"}
+                    />
+                    <Text
+                      className={`ml-2 font-medium ${
+                        isDarkMode ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      Add Set
+                    </Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              ))}
+            </View>
+          )}
         </View>
       </ScrollView>
 
+      <FinishWorkoutDialog
+        visible={showFinishDialog}
+        onClose={() => setShowFinishDialog(false)}
+        onConfirm={handleComplete}
+        isDarkMode={isDarkMode}
+      />
       <QuitWorkoutDialog
         visible={showQuitDialog}
         onClose={() => setShowQuitDialog(false)}
@@ -725,31 +1066,3 @@ export default function ActiveWorkoutScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  lightShadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  floatingTimer: {
-    position: "absolute",
-    right: 16,
-    zIndex: 50,
-  },
-  floatingShadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-});

@@ -27,7 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>myapp</string>
+          <string>powerlog</string>
           <string>com.anonymous.powerlog</string>
         </array>
       </dict>

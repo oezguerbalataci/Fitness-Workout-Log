@@ -123,6 +123,7 @@ interface PersistedState {
   loadCurrentWorkout: () => void;
   addExerciseToCurrentWorkout: (exercise: Exercise) => void;
   removeExerciseFromCurrentWorkout: (exerciseId: string) => void;
+  reorderExercises: (newOrder: string[]) => void;
   
   clearStorage: () => void;
 
@@ -700,29 +701,57 @@ export const useWorkoutStore = create<PersistedState>()(
           const exercises = { ...state.currentWorkout.exercises };
           const currentSets = [...(exercises[exerciseId] || [])];
           
-          // Remove the specific set at setIndex
-          if (setIndex >= 0 && setIndex < currentSets.length) {
-            currentSets.splice(setIndex, 1);
-            
-            // Create a new array with properly indexed sets
-            const reindexedSets = currentSets.map(set => ({ ...set }));
-            exercises[exerciseId] = reindexedSets;
+          currentSets.splice(setIndex, 1);
+          exercises[exerciseId] = currentSets;
 
-            const currentWorkout = {
-              ...state.currentWorkout,
-              exercises,
-            };
+          const currentWorkout = {
+            ...state.currentWorkout,
+            exercises,
+          };
 
-            // Save to storage
-            storage.set(CURRENT_WORKOUT_KEY, JSON.stringify(currentWorkout));
+          // Save to storage
+          storage.set(CURRENT_WORKOUT_KEY, JSON.stringify(currentWorkout));
 
-            return {
-              ...state,
-              currentWorkout,
-            };
-          }
+          return {
+            ...state,
+            currentWorkout,
+          };
+        });
+      },
 
-          return state;
+      reorderExercises: (newOrder: string[]) => {
+        set((state: PersistedState) => {
+          if (!state.currentWorkout) return state;
+
+          // Create new ordered objects based on the newOrder array
+          const orderedExercises: Record<string, WorkoutSet[]> = {};
+          const orderedExerciseData: Record<string, {
+            name: string;
+            bodyPart: string;
+            sets: number;
+            reps: number;
+          }> = {};
+
+          newOrder.forEach((exerciseId) => {
+            if (state.currentWorkout?.exercises[exerciseId]) {
+              orderedExercises[exerciseId] = state.currentWorkout.exercises[exerciseId];
+              orderedExerciseData[exerciseId] = state.currentWorkout.exerciseData[exerciseId];
+            }
+          });
+
+          const currentWorkout = {
+            ...state.currentWorkout,
+            exercises: orderedExercises,
+            exerciseData: orderedExerciseData,
+          };
+
+          // Save to storage
+          storage.set(CURRENT_WORKOUT_KEY, JSON.stringify(currentWorkout));
+
+          return {
+            ...state,
+            currentWorkout,
+          };
         });
       },
     }),

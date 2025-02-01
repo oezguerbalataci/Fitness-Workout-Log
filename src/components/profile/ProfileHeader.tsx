@@ -1,4 +1,4 @@
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Alert } from "react-native";
 import { Text } from "../../components/Text";
 import { useThemeStore } from "../../store/themeStore";
 import { useUser, useAuth } from "@clerk/clerk-expo";
@@ -11,15 +11,32 @@ export function ProfileHeader() {
   const { signOut } = useAuth();
   const router = useRouter();
 
-  const fullName = user ? `${user.firstName} ${user.lastName}` : "Profile";
+  // Get display name based on sign-up method
+  const displayName = user
+    ? user.username ||
+      `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+      "Profile"
+    : "Profile";
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      router.replace("/(auth)/login");
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
+  const handleSignOut = () => {
+    Alert.alert("Sign Out", "Are you sure you want to sign out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Sign Out",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await signOut();
+            router.replace("/(auth)/login");
+          } catch (error) {
+            console.error("Error signing out:", error);
+          }
+        },
+      },
+    ]);
   };
 
   return (
@@ -35,7 +52,7 @@ export function ProfileHeader() {
             isDarkMode ? "text-white" : "text-gray-900"
           }`}
         >
-          {fullName}
+          {displayName}
         </Text>
         <TouchableOpacity
           onPress={handleSignOut}
@@ -56,7 +73,9 @@ export function ProfileHeader() {
           isDarkMode ? "text-gray-400" : "text-gray-500"
         }`}
       >
-        Track your progress and achievements
+        {user?.username
+          ? "@" + user.username
+          : "Track your progress and achievements"}
       </Text>
     </View>
   );

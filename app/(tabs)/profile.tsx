@@ -1,4 +1,4 @@
-import { ScrollView, Alert } from "react-native";
+import { View, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useWorkoutStore } from "../../src/store/workoutStore";
 import { useThemeStore } from "../../src/store/themeStore";
@@ -34,25 +34,30 @@ export default function ProfileScreen() {
     );
   }, [clearStorage]);
 
-  return (
-    <SafeAreaView
-      className={`flex-1 ${isDarkMode ? "bg-gray-900" : "bg-gray-50"}`}
-      edges={["bottom", "top"]}
-    >
-      <ScrollView className="flex-1">
+  const StaticContent = useCallback(
+    () => (
+      <View>
         <ProfileHeader />
-
         <ThemeToggle />
         <StatsOverview
           personalBestsCount={personalBests.length}
           workoutLogsCount={workoutLogs.length}
         />
+      </View>
+    ),
+    [personalBests.length, workoutLogs.length]
+  );
 
-        <PersonalRecords
-          personalBests={personalBests}
-          onResetData={handleResetData}
-        />
-      </ScrollView>
+  return (
+    <SafeAreaView
+      className={`flex-1 ${isDarkMode ? "bg-gray-900" : "bg-gray-50"}`}
+      edges={["bottom", "top"]}
+    >
+      <PersonalRecords
+        personalBests={personalBests}
+        onResetData={handleResetData}
+        ListHeaderComponent={StaticContent}
+      />
     </SafeAreaView>
   );
 }

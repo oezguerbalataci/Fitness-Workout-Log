@@ -1,7 +1,7 @@
 {
   "name": "fitnessworkout",
   "main": "index.js",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "dev": "expo start -c --ios",
     "dev:web": "expo start -c --web",
@@ -71,7 +71,8 @@
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1",
     "zustand": "^4.5.6",
-    "expo-blur": "~14.0.3"
+    "expo-blur": "~14.0.3",
+    "expo-image": "~2.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

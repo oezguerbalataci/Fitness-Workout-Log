@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Text } from "../../components";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useWorkoutStore } from "../../store/workoutStore";
+import { useWorkoutStore, ExerciseDefinition } from "../../store/workoutStore";
 import { useThemeStore } from "../../store/themeStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -24,14 +24,21 @@ const bodyParts = [
   "Other",
 ];
 
+interface AddCustomExerciseProps {
+  isVisible: boolean;
+  onClose: () => void;
+  onAdd?: (exercise: ExerciseDefinition) => void;
+  isDarkMode?: boolean;
+}
+
 export function AddCustomExercise({
   isVisible,
   onClose,
-}: {
-  isVisible: boolean;
-  onClose: () => void;
-}) {
-  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+  onAdd,
+  isDarkMode: propIsDarkMode,
+}: AddCustomExerciseProps) {
+  const isDarkMode =
+    propIsDarkMode ?? useThemeStore((state) => state.isDarkMode);
   const addCustomExercise = useWorkoutStore((state) => state.addCustomExercise);
 
   const [name, setName] = useState("");
@@ -43,17 +50,26 @@ export function AddCustomExercise({
     if (!name.trim() || !selectedBodyPart || !defaultSets || !defaultReps)
       return;
 
-    const exerciseId = addCustomExercise({
+    const exercise = {
       name: name.trim(),
       bodyPart: selectedBodyPart,
       defaultSets: parseInt(defaultSets),
       defaultReps: parseInt(defaultReps),
-    });
+      isCustom: true,
+    };
 
+    const exerciseId = addCustomExercise(exercise);
+
+    if (onAdd) {
+      onAdd({ ...exercise, id: exerciseId });
+    }
+
+    // Reset form
     setName("");
     setSelectedBodyPart("");
     setDefaultSets("3");
     setDefaultReps("10");
+
     onClose();
   };
 
