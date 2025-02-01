@@ -1,4 +1,153 @@
-# Codebase Summary
+# 📱 Fitness Workout Log - Codebase Summary
+
+## 🏗 Architecture Overview
+
+The app follows a modern React Native architecture with Expo, focusing on performance, maintainability, and user experience.
+
+### Key Components
+
+1. **Templates**: Reusable workout templates
+2. **Workouts**: Individual workout sessions
+3. **Exercises**: Exercise definitions and tracking
+4. **Timer**: Persistent workout timer with scroll animations
+
+## 💾 State Management
+
+### 1. **Workout Store (Zustand)**
+
+- Manages templates, workouts, and exercise data
+- Handles workout session state
+- Persists data using MMKV storage
+
+### 2. **Timer Store**
+
+- Manages workout timer state
+- Features:
+  - Persistent timing across app restarts
+  - Background state restoration
+  - Scroll-based UI transitions
+  - Compact floating mode
+
+## 🔄 Data Flow
+
+### 1. **Starting a Workout**
+
+- User selects template
+- System initializes:
+  - Exercise sets
+  - Timer state
+  - Local input management
+
+### 2. **During Workout**
+
+- User interacts with exercise sets
+- Timer persists and adapts UI:
+  - Full view when scrolled to top
+  - Compact floating view when scrolled down
+- Real-time updates to:
+  - Local state
+  - Global store
+  - Timer persistence
+
+### 3. **Completing a Workout**
+
+- Updates personal bests
+- Saves workout history
+- Cleans up timer and state
+
+## 🎨 UI/UX Features
+
+### 1. **Modern Design**
+
+- Apple HIG compliance
+- Smooth animations
+- Dark/Light mode support
+- Responsive layouts
+
+### 2. **Interactive Elements**
+
+- Animated transitions
+- Haptic feedback
+- Gesture support
+- Scroll-based UI adaptations
+
+### 3. **Timer Display**
+
+- Dual-mode timer:
+  - Full-size stationary view
+  - Compact floating view
+- Smooth transitions
+- Persistent state
+- Background time tracking
+
+## 🚀 Recent Improvements
+
+### 1. **Timer Enhancement**
+
+- Added floating compact mode
+- Improved state persistence
+- Better scroll animations
+- Background state handling
+
+### 2. **UI Refinements**
+
+- Enhanced exercise cards
+- Better visual hierarchy
+- Improved spacing and layout
+- More consistent styling
+
+### 3. **Performance**
+
+- Optimized animations
+- Better state management
+- Reduced re-renders
+- Smoother transitions
+
+## 🔧 Technical Details
+
+### 1. **State Persistence**
+
+- MMKV for fast storage
+- Zustand for state management
+- Timer state restoration
+- Exercise data persistence
+
+### 2. **Animations**
+
+- Reanimated 2 for smooth transitions
+- Layout animations
+- Scroll-based interactions
+- Hardware acceleration
+
+### 3. **Type Safety**
+
+- Full TypeScript support
+- Strict type checking
+- Interface definitions
+- Type inference
+
+## 📝 Development Guidelines
+
+### 1. **Code Style**
+
+- Functional components
+- Custom hooks
+- TypeScript types
+- Clean architecture
+
+### 2. **Performance**
+
+- Memoization
+- Optimized re-renders
+- Efficient animations
+- State management
+
+### 3. **Testing**
+
+- Unit tests
+- Integration tests
+- E2E with Detox
+- Performance monitoring
 
 ## 🗂️ Project Structure
 
@@ -80,37 +229,6 @@ lib/ # Core utilities and configurations
 - **`utils`**: Utility functions (e.g., initialization, input handling).
 - **`app`**: File-based routing using Expo Router (e.g., tabs, modals, screens).
 - **`lib`**: Core utilities and configurations (e.g., themes, hooks, icons).
-
-## 🔄 Data Flow
-
-### 1. **Starting a Workout**
-
-- User selects a template in `TemplateList`.
-- Navigates to `WorkoutScreen` using `expo-router`.
-- `WorkoutScreen` initializes state from `workoutStore`.
-
-### 2. **During a Workout (Exercise Set Input)**
-
-- User interacts with `WorkoutSet` components in `ExerciseCard`.
-- Input changes update:
-  - Local state in `ExerciseCard`.
-  - Global state in `workoutStore` (via Zustand).
-
-### 3. **Completing a Workout**
-
-- User clicks "Complete" in `WorkoutHeader`.
-- `handleComplete` (in `utils`) performs:
-  - Updates personal bests in `workoutStore`.
-  - Marks workout as completed.
-  - Navigates to logs screen.
-
-### 4. **Leaving a Workout**
-
-- User clicks "Close" in `WorkoutHeader`.
-- `handleLeaveWorkout` (in `utils`) performs:
-  - Stops and resets the timer.
-  - Clears workout state (without saving).
-  - Navigates back to templates.
 
 ## 🚀 Key Changes
 

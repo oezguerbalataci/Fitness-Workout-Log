@@ -67,8 +67,9 @@ export const PersonalRecords = ({
 
   const filteredRecords = personalBests.filter(
     (record) =>
-      record.exerciseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      record.bodyPart.toLowerCase().includes(searchQuery.toLowerCase())
+      record.weight >= 1 &&
+      (record.exerciseName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.bodyPart.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const handleSearchChange = (text: string) => {
