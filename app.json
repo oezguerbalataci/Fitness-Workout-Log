@@ -2,7 +2,7 @@
   "expo": {
     "name": "PowerLog",
     "slug": "fitnessworkout",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/appicon.png",
     "scheme": "powerlog",
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.powerlog",
-      "buildNumber": "3",
+      "buildNumber": "2",
       "infoPlist": {
         "UIBackgroundModes": [
           "audio",
@@ -70,14 +70,6 @@
       },
       "eas": {
         "projectId": "ab5a33fc-b88b-439d-b531-219b312577c4"
-      },
-      "clerk": {
-        "development": {
-          "envFilePath": ".env.development"
-        },
-        "production": {
-          "envFilePath": ".env.production"
-        }
       }
     },
     "runtimeVersion": "1.0.0",

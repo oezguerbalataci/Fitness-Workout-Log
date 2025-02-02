@@ -99,7 +99,7 @@ export default function TemplateScreen() {
       {/* Header */}
       <View className={`px-4 py-4 ${isDarkMode ? "bg-gray-900" : "bg-white"}`}>
         <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-4">
+          <View className="flex-row items-center flex-1 gap-4 mr-3">
             <TouchableOpacity
               onPress={handleBack}
               className={`h-10 w-10 items-center justify-center rounded-full ${
@@ -113,7 +113,8 @@ export default function TemplateScreen() {
               />
             </TouchableOpacity>
             <Text
-              className={`text-2xl font-semibold ${
+              numberOfLines={2}
+              className={`text-2xl font-semibold flex-shrink ${
                 isDarkMode ? "text-white" : "text-gray-900"
               }`}
             >
