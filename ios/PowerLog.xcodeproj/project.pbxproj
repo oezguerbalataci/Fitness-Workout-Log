@@ -374,7 +374,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.powerlog;
-				PRODUCT_NAME = PowerLog;
+				PRODUCT_NAME = "PowerLog";
 				SWIFT_OBJC_BRIDGING_HEADER = "PowerLog/PowerLog-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -403,7 +403,7 @@
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.anonymous.powerlog;
-				PRODUCT_NAME = PowerLog;
+				PRODUCT_NAME = "PowerLog";
 				SWIFT_OBJC_BRIDGING_HEADER = "PowerLog/PowerLog-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

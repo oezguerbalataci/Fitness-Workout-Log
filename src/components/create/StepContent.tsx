@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, useColorScheme } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -18,7 +18,7 @@ import {
   durationOptions,
   availableEquipment,
 } from "./types";
-import { cn } from "../../lib/utils";
+import { useThemeStore } from "../../store/themeStore";
 
 interface StepContentProps {
   step: Step;
@@ -40,7 +40,7 @@ export function StepContent({
   formState,
   onUpdateForm,
 }: StepContentProps) {
-  const isDark = useColorScheme() === "dark";
+  const isDark = useThemeStore((state) => state.isDarkMode);
 
   const handleEquipmentToggle = (value: string) => {
     const newEquipment = formState.selectedEquipment.includes(value)
@@ -59,19 +59,17 @@ export function StepContent({
       <View className="mb-8">
         <Animated.Text
           entering={FadeIn.duration(400).delay(200)}
-          className={cn(
-            "text-[28px] font-bold tracking-tight leading-tight mb-2",
+          className={`text-[28px] font-bold tracking-tight leading-tight mb-2 ${
             isDark ? "text-white" : "text-gray-900"
-          )}
+          }`}
         >
           {step.title}
         </Animated.Text>
         <Animated.Text
           entering={FadeIn.duration(400).delay(300)}
-          className={cn(
-            "text-[17px] leading-relaxed",
-            isDark ? "text-gray-400" : "text-gray-600"
-          )}
+          className={`text-[17px] leading-relaxed ${
+            isDark ? "text-gray-300" : "text-gray-600"
+          }`}
         >
           {step.description}
         </Animated.Text>
@@ -88,12 +86,11 @@ export function StepContent({
               onChangeText={(value) => onUpdateForm(step.key, value)}
               placeholder="E.g., shoulder injury, knee pain..."
               placeholderTextColor={isDark ? "#6B7280" : "#9CA3AF"}
-              className={cn(
-                "p-4 rounded-2xl min-h-[120px] text-[17px] border",
+              className={`p-4 rounded-2xl min-h-[120px] text-[17px] border ${
                 isDark
-                  ? "bg-gray-800/50 border-gray-700 text-white"
+                  ? "bg-gray-800 border-gray-700 text-white"
                   : "bg-white border-gray-200 text-gray-900"
-              )}
+              }`}
               multiline
               textAlignVertical="top"
               numberOfLines={4}
@@ -106,10 +103,9 @@ export function StepContent({
               }}
             />
             <Text
-              className={cn(
-                "mt-3 text-[13px]",
-                isDark ? "text-gray-500" : "text-gray-500"
-              )}
+              className={`mt-3 text-[13px] ${
+                isDark ? "text-gray-400" : "text-gray-500"
+              }`}
             >
               This helps us customize your workout plan to avoid any potential
               injuries

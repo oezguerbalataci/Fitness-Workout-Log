@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, useColorScheme, Alert } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useWorkoutStore } from "../../src/store/workoutStore";
 import { generateAIPrompt, parseAIResponse } from "../../src/utils/aiUtils";
@@ -12,15 +12,14 @@ import { FORM_STEPS } from "../../src/components/create/StepperTypes";
 import type { Template } from "../../src/store/workoutStore";
 import type { FormState } from "../../src/components/create/types";
 import { useSharedValue, withSpring } from "react-native-reanimated";
-import { cn } from "../../src/lib/utils";
-import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { StatusBar } from "expo-status-bar";
+import { useThemeStore } from "../../src/store/themeStore";
 import type { AIProvider } from "../../src/services/aiService";
 
 function AITemplateGenerator() {
-  const colorScheme = useColorScheme();
+  const isDark = useThemeStore((state) => state.isDarkMode);
   const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState(1);
   const progress = useSharedValue((currentStep - 1) / (FORM_STEPS.length - 1));
@@ -161,22 +160,16 @@ function AITemplateGenerator() {
   };
 
   const currentStepData = FORM_STEPS[currentStep - 1];
-  const isDark = colorScheme === "dark";
 
   return (
-    <SafeAreaView
-      className={cn("flex-1", isDark ? "bg-gray-900" : "bg-gray-50")}
-    >
+    <SafeAreaView className={`flex-1 ${isDark ? "bg-gray-900" : "bg-gray-50"}`}>
       <StatusBar style={isDark ? "light" : "dark"} />
       {!template ? (
         <View className="flex-1">
-          <BlurView
-            intensity={100}
-            tint={isDark ? "dark" : "light"}
-            className={cn(
-              "px-6 py-4 z-10",
-              isDark ? "bg-gray-900/90" : "bg-gray-50/90"
-            )}
+          <View
+            className={`px-6 py-4 z-10 ${
+              isDark ? "bg-gray-900" : "bg-gray-50"
+            }`}
             style={{
               shadowColor: isDark ? "#000" : "#000",
               shadowOffset: { width: 0, height: 1 },
@@ -187,18 +180,16 @@ function AITemplateGenerator() {
           >
             <View className="mb-4">
               <Text
-                className={cn(
-                  "text-[34px] font-bold leading-tight tracking-tight",
+                className={`text-[34px] font-bold leading-tight tracking-tight ${
                   isDark ? "text-white" : "text-gray-900"
-                )}
+                }`}
               >
-                Generate Workout AI
+                Create Workout
               </Text>
               <Text
-                className={cn(
-                  "text-base mt-1",
+                className={`text-base mt-1 ${
                   isDark ? "text-gray-400" : "text-gray-600"
-                )}
+                }`}
               >
                 Let AI design your perfect workout routine
               </Text>
@@ -206,10 +197,9 @@ function AITemplateGenerator() {
 
             <View className="mt-2">
               <Text
-                className={cn(
-                  "text-sm font-medium mb-2",
-                  isDark ? "text-gray-300" : "text-gray-700"
-                )}
+                className={`text-sm font-medium mb-2 ${
+                  isDark ? "text-gray-400" : "text-gray-700"
+                }`}
               >
                 Step {currentStep} of {FORM_STEPS.length}
               </Text>
@@ -219,7 +209,7 @@ function AITemplateGenerator() {
                 progress={progress}
               />
             </View>
-          </BlurView>
+          </View>
 
           <ScrollView
             className="flex-1 px-6"
@@ -233,96 +223,96 @@ function AITemplateGenerator() {
             />
           </ScrollView>
 
-          <BlurView
-            intensity={100}
-            tint={isDark ? "dark" : "light"}
-            className={cn(
-              "border-t",
-              isDark ? "border-gray-800" : "border-gray-200"
-            )}
+          <View
+            className={`border-t px-6 py-4 ${
+              isDark
+                ? "border-gray-800 bg-gray-900"
+                : "border-gray-200 bg-gray-50"
+            }`}
+            style={{
+              paddingBottom: Math.max(insets.bottom, 16),
+            }}
           >
             {error ? (
-              <View className="px-6 pt-4">
-                <Text className="text-red-500 dark:text-red-400 text-[15px] font-medium">
+              <View className="pb-4">
+                <Text
+                  className={`text-[15px] font-medium ${
+                    isDark ? "text-red-400" : "text-red-500"
+                  }`}
+                >
                   {error}
                 </Text>
               </View>
             ) : null}
 
-            <View
-              className="px-6 py-4"
-              style={{ paddingBottom: Math.max(insets.bottom, 16) }}
-            >
-              <View className="flex flex-row gap-4">
-                <TouchableOpacity
-                  onPress={handleBack}
-                  disabled={currentStep === 1}
-                  className={cn(
-                    "flex-1 py-4 rounded-2xl border",
+            <View className="flex flex-row gap-4">
+              <TouchableOpacity
+                onPress={handleBack}
+                disabled={currentStep === 1}
+                className={`flex-1 py-4 rounded-2xl border ${
+                  currentStep === 1
+                    ? isDark
+                      ? "bg-gray-700/50 border-gray-700"
+                      : "bg-gray-100/50 border-gray-200"
+                    : isDark
+                    ? "bg-gray-700 border-gray-700"
+                    : "bg-white border-gray-200"
+                }`}
+                style={{
+                  shadowColor: isDark ? "#000" : "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: isDark ? 0.3 : 0.1,
+                  shadowRadius: 4,
+                  elevation: 2,
+                }}
+              >
+                <Text
+                  className={`text-center font-semibold text-[17px] ${
                     currentStep === 1
                       ? isDark
-                        ? "bg-gray-800/50 border-gray-700"
-                        : "bg-gray-100/50 border-gray-200"
+                        ? "text-gray-500"
+                        : "text-gray-400"
                       : isDark
-                      ? "bg-gray-800 border-gray-700"
-                      : "bg-white border-gray-200"
-                  )}
-                  style={{
-                    shadowColor: isDark ? "#000" : "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: isDark ? 0.3 : 0.1,
-                    shadowRadius: 4,
-                    elevation: 2,
-                  }}
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
                 >
-                  <Text
-                    className={cn(
-                      "text-center font-semibold text-[17px]",
-                      currentStep === 1
-                        ? isDark
-                          ? "text-gray-600"
-                          : "text-gray-400"
-                        : isDark
-                        ? "text-gray-300"
-                        : "text-gray-700"
-                    )}
-                  >
-                    Back
-                  </Text>
-                </TouchableOpacity>
+                  Back
+                </Text>
+              </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={handleNext}
-                  disabled={isLoading}
-                  className={cn(
-                    "flex-1 py-4 rounded-2xl",
-                    isLoading
-                      ? isDark
-                        ? "bg-blue-600/70"
-                        : "bg-blue-400"
-                      : isDark
-                      ? "bg-blue-500"
-                      : "bg-blue-500"
-                  )}
-                  style={{
-                    shadowColor: "#3B82F6",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 6,
-                    elevation: 4,
-                  }}
+              <TouchableOpacity
+                onPress={handleNext}
+                disabled={isLoading}
+                className={`flex-1 py-4 rounded-2xl ${
+                  isLoading
+                    ? isDark
+                      ? "bg-blue-600/70"
+                      : "bg-blue-400"
+                    : "bg-blue-500"
+                }`}
+                style={{
+                  shadowColor: "#3B82F6",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 6,
+                  elevation: 4,
+                }}
+              >
+                <Text
+                  className={`text-center font-semibold text-[17px] ${
+                    isLoading ? "text-white/90" : "text-white"
+                  }`}
                 >
-                  <Text className="text-white text-center font-semibold text-[17px]">
-                    {isLoading
-                      ? "Loading..."
-                      : currentStep === FORM_STEPS.length
-                      ? "Generate"
-                      : "Next"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                  {isLoading
+                    ? "Loading..."
+                    : currentStep === FORM_STEPS.length
+                    ? "Generate"
+                    : "Next"}
+                </Text>
+              </TouchableOpacity>
             </View>
-          </BlurView>
+          </View>
         </View>
       ) : (
         <TemplatePreview

@@ -1,13 +1,13 @@
 import React from "react";
-import { View, useWindowDimensions, useColorScheme } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withSpring,
   FadeIn,
   FadeOut,
 } from "react-native-reanimated";
-import { cn } from "../../lib/utils";
 import type { Step } from "./StepperTypes";
+import { useThemeStore } from "../../store/themeStore";
 
 interface StepIndicatorProps {
   steps: Step[];
@@ -21,7 +21,7 @@ export function StepIndicator({
   progress,
 }: StepIndicatorProps) {
   const { width } = useWindowDimensions();
-  const isDark = useColorScheme() === "dark";
+  const isDark = useThemeStore((state) => state.isDarkMode);
   const stepWidth = width / steps.length;
 
   const progressStyle = useAnimatedStyle(() => ({
@@ -56,8 +56,7 @@ export function StepIndicator({
             <View key={step.id} className="flex-1 items-center">
               <View className="w-full flex-row items-center">
                 <View
-                  className={cn(
-                    "h-[2px] flex-1",
+                  className={`h-[2px] flex-1 ${
                     isActive
                       ? isDark
                         ? "bg-blue-400/20"
@@ -65,12 +64,11 @@ export function StepIndicator({
                       : isDark
                       ? "bg-gray-800"
                       : "bg-gray-100"
-                  )}
+                  }`}
                 />
                 {!isLast && (
                   <View
-                    className={cn(
-                      "h-[2px] flex-1",
+                    className={`h-[2px] flex-1 ${
                       currentStep > step.id
                         ? isDark
                           ? "bg-blue-400/20"
@@ -78,15 +76,14 @@ export function StepIndicator({
                         : isDark
                         ? "bg-gray-800"
                         : "bg-gray-100"
-                    )}
+                    }`}
                   />
                 )}
               </View>
               <Animated.View
                 entering={FadeIn.duration(400)}
                 exiting={FadeOut.duration(200)}
-                className={cn(
-                  "absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2",
+                className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 ${
                   isCompleted
                     ? isDark
                       ? "bg-blue-400 border-blue-400"
@@ -98,7 +95,7 @@ export function StepIndicator({
                     : isDark
                     ? "bg-gray-900 border-gray-700"
                     : "bg-white border-gray-300"
-                )}
+                }`}
               />
             </View>
           );

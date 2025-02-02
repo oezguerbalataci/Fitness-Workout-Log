@@ -34,7 +34,7 @@ IMPORTANT RESPONSE RULES:
 7. ONLY include actual workout days
 8. Each workout MUST follow the exercise count guidelines above based on level
 9. Focus on the main exercises for each workout day based on the split type
-10. For duplicate workout types, append letters (e.g., "Push A", "Push B", "Pull A", "Pull B")
+10. ONLY append letters (A, B, etc.) when there are multiple workouts of the same type
 11. All string values must be in quotes, including special values like "to_failure"
 12. Keep exercise descriptions concise but informative
 13. NEVER include text like "per leg" or "per side" in reps - instead use description field
@@ -44,13 +44,17 @@ IMPORTANT RESPONSE RULES:
 
 WORKOUT NAMING RULES:
 1. For Push/Pull/Legs split:
-   - Use: "Push A", "Push B", "Pull A", "Pull B", "Legs A", "Legs B"
+   - Single workout per type: Use "Push", "Pull", "Legs"
+   - Multiple workouts per type: Use "Push A", "Push B", "Pull A", "Pull B", etc.
 2. For Upper/Lower split:
-   - Use: "Upper A", "Upper B", "Lower A", "Lower B"
+   - Single workout per type: Use "Upper", "Lower"
+   - Multiple workouts per type: Use "Upper A", "Upper B", "Lower A", "Lower B"
 3. For Body Part splits:
-   - If same muscle group appears multiple times, use: "Chest A", "Chest B", etc.
+   - Single workout per muscle: Use "Chest", "Back", "Shoulders", etc.
+   - Multiple workouts per muscle: Use "Chest A", "Chest B", etc.
 4. For Full Body:
-   - Use: "Full Body A", "Full Body B", "Full Body C", etc.
+   - Single workout: Use "Full Body"
+   - Multiple workouts: Use "Full Body A", "Full Body B", "Full Body C", etc.
 
 EXERCISE SELECTION RULES:
 1. Exercise Programming:

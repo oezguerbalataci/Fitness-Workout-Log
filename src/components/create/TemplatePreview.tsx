@@ -4,16 +4,14 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  useColorScheme,
   TextInput,
 } from "react-native";
-import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { cn } from "../../lib/utils";
 import type { Template } from "../../store/workoutStore";
 import { useWorkoutStore } from "../../store/workoutStore";
 import Animated, { FadeIn, FadeInDown, Layout } from "react-native-reanimated";
+import { useThemeStore } from "../../store/themeStore";
 
 interface TemplatePreviewProps {
   template: Template;
@@ -21,16 +19,15 @@ interface TemplatePreviewProps {
   onDismiss: () => void;
 }
 
-const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
+const AnimatedView = Animated.createAnimatedComponent(View);
 
 export function TemplatePreview({
   template,
   onAddTemplate,
   onDismiss,
 }: TemplatePreviewProps) {
-  const colorScheme = useColorScheme();
+  const isDark = useThemeStore((state) => state.isDarkMode);
   const insets = useSafeAreaInsets();
-  const isDark = colorScheme === "dark";
   const [templateName, setTemplateName] = useState(template.name);
   const [isEditing, setIsEditing] = useState(false);
   const templates = useWorkoutStore((state) => state.templates);
@@ -57,14 +54,9 @@ export function TemplatePreview({
 
   return (
     <View className="flex-1">
-      <AnimatedBlurView
-        intensity={100}
-        tint={isDark ? "dark" : "light"}
+      <AnimatedView
         entering={FadeIn.duration(400)}
-        className={cn(
-          "px-4 py-3 z-10",
-          isDark ? "bg-gray-900/90" : "bg-gray-50/90"
-        )}
+        className={`px-4 py-3 z-10 ${isDark ? "bg-gray-900" : "bg-gray-50"}`}
         style={{
           shadowColor: isDark ? "#000" : "#000",
           shadowOffset: { width: 0, height: 1 },
@@ -77,29 +69,27 @@ export function TemplatePreview({
           <View className="flex-1">
             <Animated.Text
               entering={FadeInDown.duration(600).delay(200)}
-              className={cn(
-                "text-2xl font-bold",
+              className={`text-2xl font-bold ${
                 isDark ? "text-white" : "text-gray-900"
-              )}
+              }`}
             >
               Your Workout
             </Animated.Text>
           </View>
           <TouchableOpacity
             onPress={onDismiss}
-            className={cn(
-              "p-2 rounded-full",
-              isDark ? "bg-gray-800" : "bg-gray-100"
-            )}
+            className={`p-2 rounded-full ${
+              isDark ? "bg-gray-700" : "bg-gray-100"
+            }`}
           >
             <MaterialCommunityIcons
               name="close"
               size={20}
-              color={isDark ? "#9CA3AF" : "#4B5563"}
+              color={isDark ? "#fff" : "#4B5563"}
             />
           </TouchableOpacity>
         </View>
-      </AnimatedBlurView>
+      </AnimatedView>
 
       <ScrollView
         className="flex-1"
@@ -109,10 +99,9 @@ export function TemplatePreview({
         <Animated.View
           entering={FadeInDown.duration(600).delay(400)}
           layout={Layout.springify()}
-          className={cn(
-            "rounded-2xl overflow-hidden",
+          className={`rounded-2xl overflow-hidden ${
             isDark ? "bg-gray-800/50" : "bg-white"
-          )}
+          }`}
           style={{
             shadowColor: isDark ? "#000" : "#000",
             shadowOffset: { width: 0, height: 2 },
@@ -122,10 +111,9 @@ export function TemplatePreview({
           }}
         >
           <View
-            className={cn(
-              "p-3 border-b",
-              isDark ? "border-gray-700" : "border-gray-200"
-            )}
+            className={`p-3 border-b ${
+              isDark ? "border-gray-800" : "border-gray-200"
+            }`}
           >
             <View className="flex-row items-center justify-between">
               {isEditing ? (
@@ -134,30 +122,27 @@ export function TemplatePreview({
                   onChangeText={setTemplateName}
                   onBlur={() => setIsEditing(false)}
                   autoFocus
-                  className={cn(
-                    "flex-1 text-base font-semibold py-1.5 px-3 rounded-lg border",
+                  className={`flex-1 text-base font-semibold py-1.5 px-3 rounded-lg border ${
                     isDark
-                      ? "bg-gray-700/50 border-gray-600 text-white"
+                      ? "bg-gray-800 border-gray-800 text-white"
                       : "bg-gray-50 border-gray-200 text-gray-900"
-                  )}
+                  }`}
                   placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
                 />
               ) : (
                 <Text
-                  className={cn(
-                    "text-base font-semibold flex-1",
+                  className={`text-base font-semibold flex-1 ${
                     isDark ? "text-white" : "text-gray-900"
-                  )}
+                  }`}
                 >
                   {templateName}
                 </Text>
               )}
               <TouchableOpacity
                 onPress={() => setIsEditing(!isEditing)}
-                className={cn(
-                  "ml-2 p-1.5 rounded-lg",
-                  isDark ? "bg-gray-700/50" : "bg-gray-50"
-                )}
+                className={`ml-2 p-1.5 rounded-lg ${
+                  isDark ? "bg-gray-700" : "bg-gray-50"
+                }`}
               >
                 <MaterialCommunityIcons
                   name={isEditing ? "check" : "pencil"}
@@ -172,20 +157,18 @@ export function TemplatePreview({
             <Animated.View
               key={workout.id}
               entering={FadeInDown.duration(600).delay(500 + index * 100)}
-              className={cn(
-                "px-3 py-2",
+              className={`px-3 py-2 ${
                 index !== template.workouts.length - 1 &&
-                  (isDark
-                    ? "border-b border-gray-700/50"
-                    : "border-b border-gray-200")
-              )}
+                (isDark
+                  ? "border-b border-gray-800"
+                  : "border-b border-gray-200")
+              }`}
             >
               <View className="flex-row items-center mb-2">
                 <View
-                  className={cn(
-                    "w-8 h-8 rounded-lg items-center justify-center",
-                    isDark ? "bg-gray-700" : "bg-blue-50"
-                  )}
+                  className={`w-8 h-8 rounded-lg items-center justify-center ${
+                    isDark ? "bg-gray-800" : "bg-blue-50"
+                  }`}
                 >
                   <MaterialCommunityIcons
                     name="dumbbell"
@@ -194,10 +177,9 @@ export function TemplatePreview({
                   />
                 </View>
                 <Text
-                  className={cn(
-                    "text-base font-semibold ml-2",
+                  className={`text-base font-semibold ml-2 ${
                     isDark ? "text-white" : "text-gray-900"
-                  )}
+                  }`}
                 >
                   {workout.name}
                 </Text>
@@ -206,27 +188,24 @@ export function TemplatePreview({
               {workout.exercises.map((exercise, exerciseIndex) => (
                 <View
                   key={exercise.id}
-                  className={cn(
-                    "ml-10 py-2 flex-row items-center justify-between",
+                  className={`ml-10 py-2 flex-row items-center justify-between ${
                     exerciseIndex !== workout.exercises.length - 1 &&
-                      (isDark
-                        ? "border-b border-gray-700/30"
-                        : "border-b border-gray-100")
-                  )}
+                    (isDark
+                      ? "border-b border-gray-800"
+                      : "border-b border-gray-100")
+                  }`}
                 >
                   <Text
-                    className={cn(
-                      "text-sm flex-1",
-                      isDark ? "text-gray-300" : "text-gray-700"
-                    )}
+                    className={`text-sm flex-1 ${
+                      isDark ? "text-gray-400" : "text-gray-700"
+                    }`}
                   >
                     {exercise.name}
                   </Text>
                   <Text
-                    className={cn(
-                      "text-xs ml-2",
+                    className={`text-xs ml-2 ${
                       isDark ? "text-gray-400" : "text-gray-500"
-                    )}
+                    }`}
                   >
                     {exercise.sets}×{exercise.reps}
                   </Text>
@@ -237,14 +216,11 @@ export function TemplatePreview({
         </Animated.View>
       </ScrollView>
 
-      <AnimatedBlurView
-        intensity={100}
-        tint={isDark ? "dark" : "light"}
+      <AnimatedView
         entering={FadeIn.duration(400)}
-        className={cn(
-          "border-t",
-          isDark ? "border-gray-800" : "border-gray-200"
-        )}
+        className={`border-t ${
+          isDark ? "border-gray-800 bg-gray-900" : "border-gray-200 bg-gray-50"
+        }`}
       >
         <View
           className="px-4 py-3"
@@ -253,12 +229,11 @@ export function TemplatePreview({
           <View className="flex-row gap-3">
             <TouchableOpacity
               onPress={onDismiss}
-              className={cn(
-                "flex-1 py-3 rounded-xl border",
+              className={`flex-1 py-3 rounded-xl border ${
                 isDark
-                  ? "bg-gray-800 border-gray-700"
+                  ? "bg-gray-700 border-gray-700"
                   : "bg-white border-gray-200"
-              )}
+              }`}
               style={{
                 shadowColor: isDark ? "#000" : "#000",
                 shadowOffset: { width: 0, height: 1 },
@@ -268,10 +243,9 @@ export function TemplatePreview({
               }}
             >
               <Text
-                className={cn(
-                  "text-center font-medium text-base",
-                  isDark ? "text-gray-300" : "text-gray-700"
-                )}
+                className={`text-center font-medium text-base ${
+                  isDark ? "text-white" : "text-gray-700"
+                }`}
               >
                 Dismiss
               </Text>
@@ -295,7 +269,7 @@ export function TemplatePreview({
             </TouchableOpacity>
           </View>
         </View>
-      </AnimatedBlurView>
+      </AnimatedView>
     </View>
   );
 }
