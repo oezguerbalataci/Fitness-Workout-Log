@@ -29,6 +29,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/bench-press.webp",
   },
   {
     id: "dumbbell-bench-press",
@@ -36,6 +37,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/chest-press.webp",
   },
   {
     id: "barbell-incline-bench-press",
@@ -43,6 +45,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "dumbbell-incline-bench-press",
@@ -50,6 +53,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "barbell-decline-bench-press",
@@ -57,6 +61,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "dumbbell-decline-bench-press",
@@ -64,6 +69,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "dumbbell-flyes",
@@ -71,6 +77,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-fly.webp",
   },
   {
     id: "incline-dumbbell-flyes",
@@ -78,6 +85,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/incline-dumbbell-fly.webp",
   },
   {
     id: "push-ups",
@@ -85,6 +93,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "",
   },
   {
     id: "cable-flyes",
@@ -92,6 +101,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/cable-fly.webp",
   },
   {
     id: "machine-chest-press",
@@ -99,6 +109,31 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Chest",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
+  },
+  {
+    id: "close-grip-bench-press",
+    name: "Close Grip Bench Press",
+    bodyPart: "Chest",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/close-grip-bench-press.webp",
+  },
+  {
+    id: "floor-press",
+    name: "Floor Press",
+    bodyPart: "Chest",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/floor-press.webp",
+  },
+  {
+    id: "machine-chest-fly",
+    name: "Machine Chest Fly",
+    bodyPart: "Chest",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/machine-chest-fly.webp",
   },
 
   // Back
@@ -108,6 +143,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 8,
+    imageUrl: "",
   },
   {
     id: "chin-ups",
@@ -115,6 +151,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 8,
+    imageUrl: "",
   },
   {
     id: "lat-pulldown",
@@ -122,6 +159,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "close-grip-lat-pulldown",
@@ -129,6 +167,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "barbell-row",
@@ -136,6 +175,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/bent-over-row.webp",
   },
   {
     id: "pendlay-row",
@@ -143,6 +183,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "dumbbell-row",
@@ -150,6 +191,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-row.webp",
   },
   {
     id: "meadows-row",
@@ -157,6 +199,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "seated-cable-row",
@@ -164,6 +207,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/seated-cable-row.webp",
   },
   {
     id: "face-pull",
@@ -171,6 +215,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "/assets/exercises/face-pull.webp",
   },
   {
     id: "barbell-deadlift",
@@ -178,6 +223,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 8,
+    imageUrl: "",
   },
   {
     id: "rack-pull",
@@ -185,6 +231,23 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Back",
     defaultSets: 3,
     defaultReps: 8,
+    imageUrl: "",
+  },
+  {
+    id: "chest-supported-dumbbell-row",
+    name: "Chest Supported Dumbbell Row",
+    bodyPart: "Back",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/chest-supported-dumbbell-row.webp",
+  },
+  {
+    id: "machine-row",
+    name: "Machine Row",
+    bodyPart: "Back",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/machine-row.webp",
   },
 
   // Legs
@@ -194,6 +257,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "front-squat",
@@ -201,6 +265,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/front-squat.webp",
   },
   {
     id: "goblet-squat",
@@ -208,6 +273,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/goblet-squat.webp",
   },
   {
     id: "leg-press",
@@ -215,6 +281,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/horizontal-leg-press.webp",
   },
   {
     id: "hack-squat",
@@ -222,6 +289,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/barbell-hack-squat.webp",
   },
   {
     id: "barbell-romanian-deadlift",
@@ -229,6 +297,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "dumbbell-romanian-deadlift",
@@ -236,6 +305,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/dumbbell-romanian-deadlift.webp",
   },
   {
     id: "leg-extension",
@@ -243,6 +313,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "",
   },
   {
     id: "leg-curl",
@@ -250,6 +321,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "/assets/exercises/seated-leg-curl.webp",
   },
   {
     id: "standing-calf-raises",
@@ -257,6 +329,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 20,
+    imageUrl: "",
   },
   {
     id: "seated-calf-raises",
@@ -264,6 +337,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 20,
+    imageUrl: "/assets/exercises/seated-calf-raise.webp",
   },
   {
     id: "barbell-lunges",
@@ -271,6 +345,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "dumbbell-lunges",
@@ -278,6 +353,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/lunge.webp",
   },
   {
     id: "bulgarian-split-squat",
@@ -285,6 +361,135 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Legs",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-bulgarian-split-squat.webp",
+  },
+  {
+    id: "safety-bar-squat",
+    name: "Safety Bar Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/safety-bar-squat.webp",
+  },
+  {
+    id: "zercher-squat",
+    name: "Zercher Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/zercher-squat.webp",
+  },
+  {
+    id: "overhead-squat",
+    name: "Overhead Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 8,
+    imageUrl: "/assets/exercises/overhead-squat.webp",
+  },
+  {
+    id: "bodyweight-squat",
+    name: "Bodyweight Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/bodyweight-squat.webp",
+  },
+  {
+    id: "box-squat",
+    name: "Box Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/box-squat.webp",
+  },
+  {
+    id: "glute-bridge",
+    name: "Glute Bridge",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/glute-bridge.webp",
+  },
+  {
+    id: "barbell-glute-bridge",
+    name: "Barbell Glute Bridge",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/barbell-glute-bridge.webp",
+  },
+  {
+    id: "hip-thrust",
+    name: "Hip Thrust",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/hip-thrust.webp",
+  },
+  {
+    id: "jefferson-deadlift",
+    name: "Jefferson Deadlift",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/jefferson-deadlift.webp",
+  },
+  {
+    id: "jefferson-squat",
+    name: "Jefferson Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/jefferson-squat.webp",
+  },
+  {
+    id: "pin-squat",
+    name: "Pin Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/pin-squat.webp",
+  },
+  {
+    id: "pistol-squat",
+    name: "Pistol Squat",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 8,
+    imageUrl: "/assets/exercises/pistol-squat.webp",
+  },
+  {
+    id: "single-leg-seated-calf-raise",
+    name: "Single Leg Seated Calf Raise",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/single-leg-seated-calf-raise.webp",
+  },
+  {
+    id: "sled-press-calf-raise",
+    name: "Sled Press Calf Raise",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/sled-press-calf-raise.webp",
+  },
+  {
+    id: "stiff-leg-deadlift",
+    name: "Stiff Leg Deadlift",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/stiff-leg-deadlift.webp",
+  },
+  {
+    id: "zercher-deadlift",
+    name: "Zercher Deadlift",
+    bodyPart: "Legs",
+    defaultSets: 3,
+    defaultReps: 8,
+    imageUrl: "/assets/exercises/zercher-deadlift.webp",
   },
 
   // Shoulders
@@ -294,6 +499,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/military-press.webp",
   },
   {
     id: "dumbbell-overhead-press",
@@ -301,6 +507,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "seated-dumbbell-press",
@@ -308,6 +515,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "arnold-press",
@@ -315,6 +523,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "dumbbell-lateral-raise",
@@ -322,6 +531,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "",
   },
   {
     id: "cable-lateral-raise",
@@ -329,6 +539,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "",
   },
   {
     id: "dumbbell-front-raise",
@@ -336,6 +547,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-front-raise.webp",
   },
   {
     id: "plate-front-raise",
@@ -343,6 +555,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "reverse-flyes",
@@ -350,6 +563,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "/assets/exercises/dumbbell-reverse-fly.webp",
   },
   {
     id: "face-pulls",
@@ -357,6 +571,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "/assets/exercises/face-pull.webp",
   },
   {
     id: "upright-row",
@@ -364,6 +579,63 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Shoulders",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
+  },
+  {
+    id: "machine-lateral-raise",
+    name: "Machine Lateral Raise",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/machine-lateral-raise.webp",
+  },
+  {
+    id: "behind-neck-press",
+    name: "Behind Neck Press",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/behind-the-neck-press.webp",
+  },
+  {
+    id: "dumbbell-incline-y-raise",
+    name: "Dumbbell Incline Y Raise",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-incline-y-raise.webp",
+  },
+  {
+    id: "dumbbell-external-rotation",
+    name: "Dumbbell External Rotation",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-external-rotation.webp",
+  },
+  {
+    id: "machine-reverse-fly",
+    name: "Machine Reverse Fly",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/machine-reverse-fly.webp",
+  },
+  {
+    id: "one-arm-landmine-press",
+    name: "One Arm Landmine Press",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/one-arm-landmine-press.webp",
+  },
+  {
+    id: "z-press",
+    name: "Z Press",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 10,
+    imageUrl: "/assets/exercises/z-press.webp",
   },
 
   // Arms
@@ -373,6 +645,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "dumbbell-curl",
@@ -380,6 +653,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-curl.webp",
   },
   {
     id: "incline-dumbbell-curl",
@@ -387,6 +661,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "hammer-curl",
@@ -394,6 +669,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "cable-curl",
@@ -401,6 +677,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "preacher-curl",
@@ -408,6 +685,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/one-arm-dumbbell-preacher-curl.webp",
   },
   {
     id: "concentration-curl",
@@ -415,6 +693,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-concentration-curl.webp",
   },
   {
     id: "tricep-pushdown",
@@ -422,6 +701,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "rope-pushdown",
@@ -429,6 +709,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/tricep-rope-pushdown.webp",
   },
   {
     id: "overhead-tricep-extension",
@@ -436,6 +717,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/cable-overhead-tricep-extension.webp",
   },
   {
     id: "skull-crushers",
@@ -443,6 +725,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/lying-tricep-extension.webp",
   },
   {
     id: "dips",
@@ -450,6 +733,71 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Arms",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/dips.webp",
+  },
+  {
+    id: "machine-bicep-curl",
+    name: "Machine Bicep Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/machine-bicep-curl.webp",
+  },
+  {
+    id: "reverse-grip-tricep-pushdown",
+    name: "Reverse Grip Tricep Pushdown",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/reverse-grip-tricep-pushdown.webp",
+  },
+  {
+    id: "cable-hammer-curl",
+    name: "Cable Hammer Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/cable-hammer-curl.webp",
+  },
+  {
+    id: "cheat-curl",
+    name: "Cheat Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 8,
+    imageUrl: "/assets/exercises/cheat-curl.webp",
+  },
+  {
+    id: "dumbbell-reverse-curl",
+    name: "Dumbbell Reverse Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-reverse-curl.webp",
+  },
+  {
+    id: "lying-cable-curl",
+    name: "Lying Cable Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/lying-cable-curl.webp",
+  },
+  {
+    id: "lying-dumbbell-tricep-extension",
+    name: "Lying Dumbbell Tricep Extension",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/lying-dumbbell-tricep-extension.webp",
+  },
+  {
+    id: "strict-curl",
+    name: "Strict Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/strict-curl.webp",
   },
 
   // Core
@@ -459,6 +807,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 20,
+    imageUrl: "",
   },
   {
     id: "plank",
@@ -466,6 +815,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 30,
+    imageUrl: "",
   },
   {
     id: "side-plank",
@@ -473,6 +823,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 30,
+    imageUrl: "",
   },
   {
     id: "russian-twist",
@@ -480,6 +831,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 20,
+    imageUrl: "",
   },
   {
     id: "leg-raises",
@@ -487,6 +839,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "",
   },
   {
     id: "hanging-leg-raises",
@@ -494,6 +847,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "/assets/exercises/hanging-knee-raise.webp",
   },
   {
     id: "bicycle-crunches",
@@ -501,6 +855,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 20,
+    imageUrl: "",
   },
   {
     id: "dead-bug",
@@ -508,6 +863,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "ab-wheel-rollout",
@@ -515,6 +871,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "",
   },
   {
     id: "cable-woodchoppers",
@@ -522,6 +879,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "/assets/exercises/cable-woodchopper.webp",
   },
   {
     id: "dragon-flag",
@@ -529,6 +887,55 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Core",
     defaultSets: 3,
     defaultReps: 8,
+    imageUrl: "",
+  },
+  {
+    id: "decline-sit-up",
+    name: "Decline Sit-up",
+    bodyPart: "Core",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/decline-sit-up.webp",
+  },
+  {
+    id: "standing-cable-crunch",
+    name: "Standing Cable Crunch",
+    bodyPart: "Core",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/standing-cable-crunch.webp",
+  },
+  {
+    id: "reverse-crunches",
+    name: "Reverse Crunches",
+    bodyPart: "Core",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/reverse-crunches.webp",
+  },
+  {
+    id: "dumbbell-side-bend",
+    name: "Dumbbell Side Bend",
+    bodyPart: "Core",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/dumbbell-side-bend.webp",
+  },
+  {
+    id: "flutter-kicks",
+    name: "Flutter Kicks",
+    bodyPart: "Core",
+    defaultSets: 3,
+    defaultReps: 20,
+    imageUrl: "/assets/exercises/flutter-kicks.webp",
+  },
+  {
+    id: "roman-chair-side-bend",
+    name: "Roman Chair Side Bend",
+    bodyPart: "Core",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/roman-chair-side-bend.webp",
   },
 
   // Full Body
@@ -538,6 +945,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 10,
+    imageUrl: "/assets/exercises/burpees.webp",
   },
   {
     id: "mountain-climbers",
@@ -545,6 +953,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 20,
+    imageUrl: "",
   },
   {
     id: "kettlebell-swings",
@@ -552,6 +961,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 15,
+    imageUrl: "",
   },
   {
     id: "thrusters",
@@ -559,6 +969,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 12,
+    imageUrl: "",
   },
   {
     id: "clean-and-press",
@@ -566,6 +977,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 8,
+    imageUrl: "/assets/exercises/dumbbell-clean-and-press.webp",
   },
   {
     id: "power-clean",
@@ -573,6 +985,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 6,
+    imageUrl: "",
   },
   {
     id: "snatch",
@@ -580,6 +993,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 5,
+    imageUrl: "/assets/exercises/power-snatch.webp",
   },
   {
     id: "turkish-get-up",
@@ -587,6 +1001,47 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Full Body",
     defaultSets: 3,
     defaultReps: 5,
+    imageUrl: "",
+  },
+  {
+    id: "clean-pull",
+    name: "Clean Pull",
+    bodyPart: "Full Body",
+    defaultSets: 3,
+    defaultReps: 6,
+    imageUrl: "/assets/exercises/clean-pull.webp",
+  },
+  {
+    id: "snatch-pull",
+    name: "Snatch Pull",
+    bodyPart: "Full Body",
+    defaultSets: 3,
+    defaultReps: 6,
+    imageUrl: "/assets/exercises/snatch-pull.webp",
+  },
+  {
+    id: "hang-snatch",
+    name: "Hang Snatch",
+    bodyPart: "Full Body",
+    defaultSets: 3,
+    defaultReps: 5,
+    imageUrl: "/assets/exercises/hang-snatch.webp",
+  },
+  {
+    id: "snatch-deadlift",
+    name: "Snatch Deadlift",
+    bodyPart: "Full Body",
+    defaultSets: 3,
+    defaultReps: 6,
+    imageUrl: "/assets/exercises/snatch-deadlift.webp",
+  },
+  {
+    id: "split-jerk",
+    name: "Split Jerk",
+    bodyPart: "Full Body",
+    defaultSets: 3,
+    defaultReps: 5,
+    imageUrl: "/assets/exercises/split-jerk.webp",
   },
 
   // Cardio
@@ -596,6 +1051,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 1,
     defaultReps: 20,
+    imageUrl: "",
   },
   {
     id: "sprints",
@@ -603,6 +1059,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 5,
     defaultReps: 30,
+    imageUrl: "",
   },
   {
     id: "jumping-rope",
@@ -610,6 +1067,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 3,
     defaultReps: 50,
+    imageUrl: "",
   },
   {
     id: "cycling",
@@ -617,6 +1075,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 1,
     defaultReps: 20,
+    imageUrl: "",
   },
   {
     id: "rowing",
@@ -624,6 +1083,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 1,
     defaultReps: 15,
+    imageUrl: "",
   },
   {
     id: "battle-ropes",
@@ -631,6 +1091,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 3,
     defaultReps: 30,
+    imageUrl: "",
   },
   {
     id: "sled-push",
@@ -638,6 +1099,7 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 3,
     defaultReps: 30,
+    imageUrl: "",
   },
   {
     id: "assault-bike",
@@ -645,5 +1107,72 @@ export const exercises: ExerciseDefinition[] = [
     bodyPart: "Cardio",
     defaultSets: 1,
     defaultReps: 10,
+    imageUrl: "",
+  },
+
+  // Additional exercises with unique equipment
+  {
+    id: "smith-machine-shrug",
+    name: "Smith Machine Shrug",
+    bodyPart: "Back",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/smith-machine-shrug.webp",
+  },
+  {
+    id: "machine-shrug",
+    name: "Machine Shrug",
+    bodyPart: "Back",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/machine-shrug.webp",
+  },
+  {
+    id: "dumbbell-shrug",
+    name: "Dumbbell Shrug",
+    bodyPart: "Back",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/dumbbell-shrug.webp",
+  },
+  {
+    id: "wrist-curl",
+    name: "Wrist Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/wrist-curl.webp",
+  },
+  {
+    id: "reverse-wrist-curl",
+    name: "Reverse Wrist Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/reverse-wrist-curl.webp",
+  },
+  {
+    id: "dumbbell-reverse-wrist-curl",
+    name: "Dumbbell Reverse Wrist Curl",
+    bodyPart: "Arms",
+    defaultSets: 3,
+    defaultReps: 15,
+    imageUrl: "/assets/exercises/dumbbell-reverse-wrist-curl.webp",
+  },
+  {
+    id: "handstand-push-ups",
+    name: "Handstand Push-ups",
+    bodyPart: "Shoulders",
+    defaultSets: 3,
+    defaultReps: 8,
+    imageUrl: "/assets/exercises/handstand-push-ups.webp",
+  },
+  {
+    id: "squat-thrust",
+    name: "Squat Thrust",
+    bodyPart: "Full Body",
+    defaultSets: 3,
+    defaultReps: 12,
+    imageUrl: "/assets/exercises/squat-thrust.webp",
   },
 ]; 

@@ -12,6 +12,7 @@ import type { Template } from "../../store/workoutStore";
 import { useWorkoutStore } from "../../store/workoutStore";
 import Animated, { FadeIn, FadeInDown, Layout } from "react-native-reanimated";
 import { useThemeStore } from "../../store/themeStore";
+import { haptics } from "~/src/utils/haptics";
 
 interface TemplatePreviewProps {
   template: Template;
@@ -33,6 +34,7 @@ export function TemplatePreview({
   const templates = useWorkoutStore((state) => state.templates);
 
   const handleSave = () => {
+    haptics.success();
     if (templateName.trim()) {
       let finalName = templateName.trim();
       let counter = 1;

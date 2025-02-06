@@ -16,6 +16,8 @@ import { useAuth, useSignIn, useSignUp, useOAuth } from "@clerk/clerk-expo";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useCallback, useState } from "react";
 import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from "expo-auth-session";
+import { makeRedirectUri } from "expo-auth-session";
 import { z } from "zod";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
@@ -194,16 +196,46 @@ export default function LoginScreen() {
 
   const onSignInWithGoogle = useCallback(async () => {
     try {
-      const { createdSessionId, setActive } = await googleAuth({
+      // Force close any existing browser sessions
+      await WebBrowser.coolDownAsync();
+
+      const { createdSessionId, setActive, signIn, signUp } = await googleAuth({
         redirectUrl: CLERK_OAUTH_REDIRECT_URL,
       });
 
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
+      if (!createdSessionId && signUp && !signIn) {
+        // This is a new user, complete the sign up
+        const completeSignUp = await signUp.create({
+          strategy: "oauth_google",
+          redirectUrl: CLERK_OAUTH_REDIRECT_URL,
+        });
+
+        if (completeSignUp.status === "complete") {
+          await setActive!({ session: completeSignUp.createdSessionId });
+          router.replace("/(tabs)");
+        }
+      } else if (!createdSessionId && signIn) {
+        // Existing user, complete the sign in
+        const completeSignIn = await signIn.create({
+          strategy: "oauth_google",
+          redirectUrl: CLERK_OAUTH_REDIRECT_URL,
+        });
+
+        await setActive!({ session: completeSignIn.createdSessionId });
+        router.replace("/(tabs)");
+      } else if (createdSessionId) {
+        // Direct success case
+        await setActive!({ session: createdSessionId });
         router.replace("/(tabs)");
       }
+
+      // Force cleanup of the browser session
+      await WebBrowser.coolDownAsync();
     } catch (err) {
       handleError(err);
+    } finally {
+      // Ensure the browser is cleaned up
+      await WebBrowser.coolDownAsync();
     }
   }, [googleAuth, router]);
 

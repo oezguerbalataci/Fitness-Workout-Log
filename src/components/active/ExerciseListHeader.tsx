@@ -1,68 +1,97 @@
-import { View, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
-import { Text } from "../../components/Text";
-import { AddExerciseModal } from "./AddExerciseModal";
-import { WorkoutSet } from "../../store/workoutStore";
-import { haptics } from "../../utils/haptics";
+import { useRouter } from "expo-router";
 
 interface ExerciseListHeaderProps {
   isDarkMode: boolean;
-  setExerciseSets: React.Dispatch<
-    React.SetStateAction<Record<string, WorkoutSet[]>>
-  >;
-  setLocalInputs: React.Dispatch<
-    React.SetStateAction<
-      Record<
-        string,
-        Record<number, { weight: string; reps: string; rpe: string }>
-      >
-    >
-  >;
+  isEditMode: boolean;
+  onEditModeToggle: (isEdit: boolean) => void;
+  onReorderComplete: () => void;
 }
 
-export const ExerciseListHeader = ({
+export function ExerciseListHeader({
   isDarkMode,
-  setExerciseSets,
-  setLocalInputs,
-}: ExerciseListHeaderProps) => {
-  const [showAddExercise, setShowAddExercise] = useState(false);
-
-  const handleAddExercise = () => {
-    haptics.light();
-    setShowAddExercise(true);
-  };
+  isEditMode,
+  onEditModeToggle,
+  onReorderComplete,
+}: ExerciseListHeaderProps) {
+  const router = useRouter();
 
   return (
-    <>
-      <View
-        className={`flex-row justify-between items-center px-4 py-2 ${
-          isDarkMode ? "bg-gray-900" : "bg-white"
-        }`}
-      >
+    <View className="px-4 py-4">
+      <View className="flex-row items-center justify-between">
         <Text
-          variant="bold"
-          className={`text-base font-semibold ${
+          className={`text-lg font-medium ${
             isDarkMode ? "text-white" : "text-gray-900"
           }`}
         >
           Exercises
         </Text>
-        <TouchableOpacity onPress={handleAddExercise}>
-          <MaterialIcons
-            name="add"
-            size={24}
-            color={isDarkMode ? "white" : "black"}
-          />
-        </TouchableOpacity>
+        <View className="flex-row gap-2">
+          {!isEditMode && (
+            <TouchableOpacity
+              className={`flex-row items-center gap-2 py-2 px-3 rounded-full ${
+                isDarkMode ? "bg-gray-800" : "bg-gray-100"
+              }`}
+              onPress={() => onEditModeToggle(true)}
+            >
+              <MaterialIcons
+                name="reorder"
+                size={20}
+                color={isDarkMode ? "#fff" : "#000"}
+              />
+              <Text
+                className={`font-medium ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Reorder
+              </Text>
+            </TouchableOpacity>
+          )}
+          {isEditMode ? (
+            <TouchableOpacity
+              className={`flex-row items-center gap-2 py-2 px-3 rounded-full ${
+                isDarkMode ? "bg-gray-800" : "bg-gray-100"
+              }`}
+              onPress={onReorderComplete}
+            >
+              <MaterialIcons
+                name="check"
+                size={20}
+                color={isDarkMode ? "#fff" : "#000"}
+              />
+              <Text
+                className={`font-medium ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Done
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              className={`flex-row items-center gap-2 py-2 px-3 rounded-full ${
+                isDarkMode ? "bg-gray-800" : "bg-gray-100"
+              }`}
+              onPress={() => router.push("/workout/exercises")}
+            >
+              <MaterialIcons
+                name="add"
+                size={20}
+                color={isDarkMode ? "#fff" : "#000"}
+              />
+              <Text
+                className={`font-medium ${
+                  isDarkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Add Exercise
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-      <AddExerciseModal
-        visible={showAddExercise}
-        onClose={() => setShowAddExercise(false)}
-        isDarkMode={isDarkMode}
-        setExerciseSets={setExerciseSets}
-        setLocalInputs={setLocalInputs}
-      />
-    </>
+    </View>
   );
-};
+}

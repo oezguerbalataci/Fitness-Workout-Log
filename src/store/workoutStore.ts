@@ -12,6 +12,7 @@ export interface ExerciseDefinition {
   defaultSets: number;
   defaultReps: number;
   isCustom?: boolean;
+  imageUrl?: string;
 }
 
 export type Exercise = {

@@ -1,151 +1,84 @@
-import { View, TouchableOpacity } from "react-native";
-import { Text } from "../Text";
+import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import Animated, {
   useAnimatedStyle,
   interpolate,
   Extrapolate,
-  SharedValue,
-  Layout,
 } from "react-native-reanimated";
-import { WorkoutTimer } from "../workout/WorkoutTimer";
-import { haptics } from "../../utils/haptics";
 
 interface WorkoutHeaderProps {
-  title: string;
-  onLeave: () => void;
-  onComplete: () => void;
-  scrollY: SharedValue<number>;
-  headerHeight: number;
   isDarkMode: boolean;
+  workoutName: string;
+  headerHeight: number;
+  scrollY: Animated.SharedValue<number>;
+  onLeaveWorkout: () => void;
+  onComplete: () => void;
 }
 
-export const WorkoutHeader = ({
-  title,
-  onLeave,
-  onComplete,
-  scrollY,
-  headerHeight,
+export function WorkoutHeader({
   isDarkMode,
-}: WorkoutHeaderProps) => {
-  const handleLeave = () => {
-    haptics.warning();
-    onLeave();
-  };
-
-  const handleComplete = () => {
-    haptics.success();
-    onComplete();
-  };
-
-  const timerStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      scrollY.value,
-      [0, headerHeight * 0.5],
-      [0, 1],
-      Extrapolate.CLAMP
-    );
-
-    const translateY = interpolate(
-      scrollY.value,
-      [0, headerHeight * 0.5],
-      [20, 0],
-      Extrapolate.CLAMP
-    );
-
-    return {
-      opacity,
-      transform: [{ translateY }],
-    };
-  });
-
-  const titleStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      scrollY.value,
-      [0, headerHeight * 0.5],
-      [1, 0],
-      Extrapolate.CLAMP
-    );
-
-    const translateY = interpolate(
-      scrollY.value,
-      [0, headerHeight * 0.5],
-      [0, -20],
-      Extrapolate.CLAMP
-    );
-
-    return {
-      opacity,
-      transform: [{ translateY }],
-    };
-  });
-
+  workoutName,
+  headerHeight,
+  scrollY,
+  onLeaveWorkout,
+  onComplete,
+}: WorkoutHeaderProps) {
   return (
-    <View
-      className={`px-4 py-2 border-b ${
-        isDarkMode
-          ? "bg-gray-900 border-gray-800"
-          : "bg-gray-50 border-gray-200"
-      }`}
+    <Animated.View
+      className={`${isDarkMode ? "bg-gray-900" : "bg-white"}`}
+      style={[
+        useAnimatedStyle(() => {
+          const translateY = interpolate(
+            scrollY.value,
+            [0, headerHeight],
+            [0, -headerHeight * 2],
+            Extrapolate.CLAMP
+          );
+          return {
+            transform: [{ translateY }],
+          };
+        }),
+      ]}
     >
-      <View className="flex-row justify-between items-center">
-        <TouchableOpacity
-          onPress={handleLeave}
-          className={`p-2 -ml-2 rounded-lg ${
-            isDarkMode
-              ? "bg-red-900/30 active:bg-red-900/50"
-              : "bg-red-50 active:bg-red-100"
-          }`}
-        >
-          <MaterialIcons
-            name="close"
-            size={24}
-            color={isDarkMode ? "#f87171" : "#ef4444"}
-          />
-        </TouchableOpacity>
-
-        <View className="flex-1 items-center">
-          <Animated.View style={titleStyle}>
+      <View className="px-4 py-4">
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row items-center gap-4">
+            <TouchableOpacity
+              onPress={onLeaveWorkout}
+              className={`h-10 w-10 items-center justify-center rounded-full ${
+                isDarkMode ? "bg-gray-800" : "bg-gray-100"
+              }`}
+            >
+              <MaterialIcons
+                name="close"
+                size={24}
+                color={isDarkMode ? "#fff" : "#000"}
+              />
+            </TouchableOpacity>
             <Text
-              variant="bold"
-              className={`text-lg font-semibold ${
+              className={`text-2xl font-semibold ${
                 isDarkMode ? "text-white" : "text-gray-900"
               }`}
-              numberOfLines={1}
             >
-              {title}
+              {workoutName}
             </Text>
-          </Animated.View>
-
-          <Animated.View
-            style={[
-              {
-                position: "absolute",
-                width: "100%",
-                alignItems: "center",
-              },
-              timerStyle,
-            ]}
+          </View>
+          <TouchableOpacity
+            onPress={onComplete}
+            className={`h-10 px-4 items-center justify-center rounded-full ${
+              isDarkMode ? "bg-white" : "bg-black"
+            }`}
           >
-            <WorkoutTimer isDarkMode={isDarkMode} compact />
-          </Animated.View>
+            <Text
+              className={`font-medium ${
+                isDarkMode ? "text-black" : "text-white"
+              }`}
+            >
+              Finish
+            </Text>
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          onPress={handleComplete}
-          className={`p-2 -mr-2 rounded-lg ${
-            isDarkMode
-              ? "bg-green-900/30 active:bg-green-900/50"
-              : "bg-green-50 active:bg-green-100"
-          }`}
-        >
-          <MaterialIcons
-            name="check"
-            size={24}
-            color={isDarkMode ? "#4ade80" : "#22c55e"}
-          />
-        </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
-};
+}

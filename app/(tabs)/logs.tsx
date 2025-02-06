@@ -24,13 +24,7 @@ const formatDate = (date: number) => new Date(date).toISOString().split("T")[0];
 // Get today's date in the same format as formatDate
 const getTodayDate = () => new Date().toISOString().split("T")[0];
 
-const WorkoutLogItem = ({
-  log,
-  isDarkMode,
-}: {
-  log: any;
-  isDarkMode: boolean;
-}) => (
+const WorkoutLogItem = ({log, isDarkMode}: { log: any; isDarkMode: boolean }) => (
   <View
     className={`${
       isDarkMode ? "bg-gray-800" : "bg-white"
@@ -272,7 +266,6 @@ export default function LogsScreen() {
           renderItem={renderItem}
           estimatedItemSize={200}
           keyExtractor={keyExtractor}
-          extraData={isDarkMode}
           ListEmptyComponent={ListEmptyComponent}
           contentContainerStyle={{ paddingVertical: 24 }}
           ItemSeparatorComponent={() => <View style={{ height: 16 }} />}

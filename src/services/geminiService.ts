@@ -1,4 +1,4 @@
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
 
 interface GeminiResponse {
   candidates: Array<{
@@ -39,22 +39,11 @@ IMPORTANT RESPONSE RULES:
 12. Keep exercise descriptions concise but informative
 13. NEVER include text like "per leg" or "per side" in reps - instead use description field
 14. The "reps" field must ONLY contain numbers or "to_failure" - no other text
-15. Keep response size reasonable - limit to 5 workout days maximum
-16. Each exercise MUST have these exact fields: "id", "name", "sets", "reps", "bodyPart", "description"
+15. Each exercise MUST have these exact fields: "id", "name", "sets", "reps", "bodyPart", "description"
 
 WORKOUT NAMING RULES:
-1. For Push/Pull/Legs split:
-   - Single workout per type: Use "Push", "Pull", "Legs"
-   - Multiple workouts per type: Use "Push A", "Push B", "Pull A", "Pull B", etc.
-2. For Upper/Lower split:
-   - Single workout per type: Use "Upper", "Lower"
-   - Multiple workouts per type: Use "Upper A", "Upper B", "Lower A", "Lower B"
-3. For Body Part splits:
-   - Single workout per muscle: Use "Chest", "Back", "Shoulders", etc.
-   - Multiple workouts per muscle: Use "Chest A", "Chest B", etc.
-4. For Full Body:
-   - Single workout: Use "Full Body"
-   - Multiple workouts: Use "Full Body A", "Full Body B", "Full Body C", etc.
+- Single workout per type: Use "Push", "Pull", "Legs"
+- Multiple workouts per type: Use "Push A", "Push B", "Pull A", "Pull B", etc.
 
 EXERCISE SELECTION RULES:
 1. Exercise Programming:
@@ -73,23 +62,6 @@ EXERCISE SELECTION RULES:
    - Advanced techniques (drop sets, supersets, etc.)
    - Multiple angles/variations per muscle group
    - Specialized isolation movements
-
-2. Volume Guidelines:
-   Beginner:
-   - Compounds: 3 sets, 8-12 reps
-   - Isolations: 2-3 sets, 12-15 reps
-   - Rest: 2-3 minutes between all sets
-
-   Intermediate:
-   - Compounds: 3-4 sets, 6-12 reps
-   - Isolations: 3 sets, 10-15 reps
-   - Rest: 1.5-2.5 minutes between sets
-
-   Advanced:
-   - Compounds: 4-5 sets, 6-12 reps
-   - Isolations: 3-4 sets, 10-15 reps
-   - Rest: Varies by intensity (1-3 minutes)
-   - Include intensity techniques
 
 JSON Structure Example (NOTE: This is just for format reference, you must include proper exercise count based on level):
 

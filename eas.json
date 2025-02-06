@@ -9,21 +9,36 @@
       "ios": {
         "resourceClass": "m-medium"
       },
-      "channel": "development"
+      "channel": "development",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_aW50ZXJuYWwtd2FzcC0wLmNsZXJrLmFjY291bnRzLmRldiQ",
+        "EXPO_PUBLIC_DEEPSEEK_API_KEY": "sk-5cd5b74fb2e24b42ae267720735a99bd",
+        "EXPO_PUBLIC_GEMINI_API_KEY": "AIzaSyD0PcqP0AtU0d2t2f3y52zaymykmt-FYCE"
+      }
     },
     "preview": {
       "distribution": "internal",
       "ios": {
         "resourceClass": "m-medium"
       },
-      "channel": "preview"
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_aW50ZXJuYWwtd2FzcC0wLmNsZXJrLmFjY291bnRzLmRldiQ",
+        "EXPO_PUBLIC_DEEPSEEK_API_KEY": "sk-5cd5b74fb2e24b42ae267720735a99bd",
+        "EXPO_PUBLIC_GEMINI_API_KEY": "AIzaSyD0PcqP0AtU0d2t2f3y52zaymykmt-FYCE"
+      }
     },
     "production": {
       "autoIncrement": true,
       "ios": {
         "resourceClass": "m-medium"
       },
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_aW50ZXJuYWwtd2FzcC0wLmNsZXJrLmFjY291bnRzLmRldiQ",
+        "EXPO_PUBLIC_DEEPSEEK_API_KEY": "sk-5cd5b74fb2e24b42ae267720735a99bd",
+        "EXPO_PUBLIC_GEMINI_API_KEY": "AIzaSyD0PcqP0AtU0d2t2f3y52zaymykmt-FYCE"
+      }
     }
   },
   "submit": {
