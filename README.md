@@ -6,11 +6,31 @@ A modern, intuitive workout tracking app built with React Native and Expo. Track
 
 - 📱 Cross-platform (iOS & Android)
 - 💪 Create custom workout templates
+- 🤖 AI-powered workout generation
 - ⏱️ Built-in workout timer
 - 📊 Track your progress and personal records
 - 🌓 Light/Dark mode support
 - 📝 Log completed workouts
 - ⚡ Quick and responsive UI
+
+## AI Workout Creation
+
+The app features an intelligent workout generation system that helps you create personalized workout routines:
+
+- **Smart Template Generation**: Input your goals, experience level, and available equipment to get a customized workout template
+- **Exercise Selection**: AI analyzes your preferences and suggests optimal exercise combinations
+- **Progressive Overload**: Automatically adjusts workout intensity based on your progress
+- **Equipment Adaptation**: Suggests alternative exercises based on available equipment
+- **Rest Day Planning**: Intelligently schedules rest days to optimize recovery
+- **Workout Split Optimization**: Creates balanced workout splits for different muscle groups
+
+To use the AI workout creation:
+
+1. Navigate to the Create tab
+2. Select "AI Workout Generation"
+3. Fill in your preferences and constraints
+4. Review and customize the generated workout
+5. Save as a template or start immediately
 
 ## Screenshots
 
@@ -31,6 +51,7 @@ A modern, intuitive workout tracking app built with React Native and Expo. Track
 - TailwindCSS (NativeWind)
 - MMKV Storage
 - Expo Router
+- OpenAI GPT-4 API (for workout generation)
 
 ## Getting Started
 
@@ -40,6 +61,7 @@ A modern, intuitive workout tracking app built with React Native and Expo. Track
 - npm or yarn
 - Expo CLI
 - iOS Simulator (for iOS development) or Android Studio (for Android development)
+- OpenAI API Key (for AI workout generation)
 
 ### Installation
 
@@ -56,6 +78,13 @@ cd fitnessworkout
 npm install
 # or
 yarn install
+```
+
+3. Set up environment variables:
+
+```bash
+# Create a .env file and add your OpenAI API key
+OPENAI_API_KEY=your_api_key_here
 ```
 
 ### Running the App
@@ -107,7 +136,8 @@ fitnessworkout/
 │   ├── components/        # Reusable components
 │   ├── store/            # State management
 │   ├── types/            # TypeScript types
-│   └── utils/            # Helper functions
+│   ├── utils/            # Helper functions
+│   └── ai/               # AI workout generation logic
 ├── assets/               # Images, fonts, etc.
 └── ...
 ```
